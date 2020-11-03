@@ -1,0 +1,68 @@
+#+TITLE: basemacs
+An Emacs base to build on.
+
+* About
+=basemacs= is the (mostly) unopinionated start to an Emacs configuration -- a *base* to build on. It contains some sane defaults and uses a minimal set of packages to get you started with your own config.
+
+Package management and configuration are handled with:
+- [[https://github.com/raxod502/straight.el][straight.el]] - for package management
+- [[https://github.com/jwiegley/use-package][use-package ]]- for package configuration
+- [[https://github.com/noctuid/general.el][general.el]] - for configuring custom keys and hooks
+
+Essential packages:
+- [[http://company-mode.github.io/][company]] - for code completion
+- [[https://github.com/flycheck/flycheck][flycheck]] - for error checking
+- [[https://magit.vc/][magit]] - for git interaction
+- [[https://github.com/justbur/emacs-which-key][which-key]] - to display key combos
+- [[https://github.com/joaotavora/yasnippet][yasnippet]] - for code snippets
+
+This project was inspired by:
+- [[https://github.com/ianpan870102/yay-evil-emacs][yay-evil-emacs]]
+- [[https://github.com/MatthewZMD/.emacs.d][M-EMACS]]
+- [[https://github.com/hlissner/doom-emacs][doom-emacs]]
+- [[https://www.spacemacs.org/][spacemacs]]
+
+* Requirements
+=basemacs= requires only:
+- =git=
+- Emacs 27+
+
+It also uses DejaVu fonts, but these are not required and can be easily changed.
+
+I have only tested it on OSX and Linux, but it should have no problems working in other environments.
+
+* Getting Started
+There are a few ways to use this:
+
+- Backup your current config and clone this into =~/.emacs.d= or =~/.config/emacs=
+After you backup your current config, clone this repo to =~/.emacs.d=:
+#+begin_src sh
+  git clone https://github.com/kwpav/basemacs.git ~/.emacs.d
+#+end_src
+
+Or to =~./config/emacs=:
+#+begin_src sh
+  git clone https://github.com/kwpav/basemacs.git ~/.config/emacs
+#+end_src
+
+- Clone this repo to your preferred location and use [[https://github.com/plexus/chemacs][chemacs]]
+#+begin_src sh
+  git clone https://github.com/kwpav/basemacs.git ~/.config/basemacs
+#+end_src
+
+Then add the cloned location to =~/.emacs-profiles.el=:
+#+begin_src emacs-lisp
+  (("default" . ((user-emacs-directory . "~/.emacs.d")))
+   ("basemacs" . ((user-emacs-directory . "~/config/basemacs"))))
+#+end_src
+
+Run with =emacs --with-profile basemacs=.
+
+- Or you can just copy/paste whatever bits and pieces of this you want to your own config
+
+Now that the config is in the right place, simply start up Emacs! The first time running it may take a few minutes as packages install.
+
+* How does this work?
+[[file:config.org][config.org]] contains all the code for both  =early-init.el= and =init.el=. The code in the =src= blocks is tangled (copied) to those files using =org-babel-tangle= ( ~C-c C-v t~ ).
+
+The code can be edited  directly in the file, or by putting the cursor in the =src= block and using  =org-edit-special= ( ~C-c '~ ). This opens the code up in an =elisp= buffer for easier editing and =eval='ing. Save any changes made by pressing ~C-c '~ again, abort any changes with ~C-c k~.
