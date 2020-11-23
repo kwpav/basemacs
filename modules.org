@@ -1,5 +1,12 @@
+#+TITLE: basemacs modules
+
+* About
+This is a set of "modules" for =basemacs=. As with the rest of =basemacs=, these are only a beginning point, but they are meant more as examples of what other things can be configured. These are also probably a little bit more opinionated.
+
 * UI
-** rainbow-delimiters
+The UI module contains some things that make Emacs look nicer.
+** basemacs-ui
+*** rainbow-delimiters
 #+begin_quote
 =rainbow-delimiters= is a "rainbow parentheses"-like mode which highlights delimiters such as parentheses, brackets or braces according to their depth. Each successive level is highlighted in a different color. This makes it easy to spot matching delimiters, orient yourself in the code, and tell which statements are at a given depth.
 #+end_quote
@@ -11,7 +18,7 @@ Turn this on only for programming modes.
     :ghook 'prog-mode-hook)
 #+end_src
 
-** variable-pitch
+*** variable-pitch
 =variable-pitch-mode= allows us to have multiple fonts in a single buffer. This is useful for =org-mode= which can have prose, code, and other things, in the same file.
 
 Turn =variable-pitch-mode= on for =org-mode=.
@@ -22,7 +29,7 @@ Turn =variable-pitch-mode= on for =org-mode=.
     ('org-mode-hook #'variable-pitch-mode))
 #+end_src
 
-** font
+*** font
 Now we set the main font to use in all buffers, and the proportional and mono fonts in =variable-pitch-mode=.
 #+begin_src emacs-lisp :tangle modules/basemacs-ui.el
   (use-package faces
@@ -38,7 +45,7 @@ Now we set the main font to use in all buffers, and the proportional and mono fo
 
 The =:height= value for the =default= face is the font size multiplied by 10, e.g. =11 x 10 = 110=. The =:height= values for the =variable-pitch= and =fixed-pitch= faces are their sizes relative to the default face. This is because they use a floating point number. An integer may be used here, but then fonts will not scale gracefully.
 
-** modus-themes
+*** modus-themes
 These light and dark themes are WCAG compliant, have support for =variable-pitch-mode= in =org-mode=, and are highly customizable.
 
 Light theme
@@ -84,13 +91,22 @@ Toggle between them
         (load-theme 'modus-operandi t)))
 #+end_src
 
-** EOF
+*** EOF
 #+begin_src emacs-lisp :tangle modules/basemacs-ui.el
   (provide 'basemacs-ui)
   ;;; basemacs-ui.el ends here
 #+end_src
-* Completion
-** IDO
+* Narrowing
+One of the biggest changes that we can make to the usability of Emacs, are these "narrowing" or "completion" frameworks. For example, when you  press =M-x=, these will give you a list of commands you can run in the minibuffer and narrow them down as you type. There are 4 major options to choose from:
+1. ido - built in, with a few extra packages it is pretty nice
+2. ivy - uses minibuffer, swiper for search results
+3. helm - featureful
+4. selectrum - like ivy, newer, simpler code
+
+Only one of these should be used at a time.
+** basemacs-ido
+The built-in =ido-mode= is pretty good with some good default settings and extra packages.
+
 #+begin_src emacs-lisp :tangle modules/basemacs-ido.el
   (use-package ido
     :straight nil
@@ -129,7 +145,7 @@ Toggle between them
   ;;; basemacs-ido.el ends here
 #+end_src
 
-** Selectrum
+** basemacs-selectrum
 #+begin_src emacs-lisp :tangle modules/basemacs-selectrum.el
   (use-package selectrum
     :straight t
@@ -155,4 +171,103 @@ Toggle between them
   ;;; basemacs-selectrum.el ends here
 #+end_src
 
-* Evil
+** basemacs-ivy
+*** Ivy / Counsel / Swiper
+#+begin_quote
+Ivy is a generic completion mechanism for Emacs
+#+end_quote
+
+#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-ivy.el
+  (use-package ivy
+    :straight t
+    :demand t
+    :general
+    ("<f6>" 'ivy-resume)
+    :custom
+    (ivy-use-virtual-buffers t)
+    (enable-recursive-minibuffers t)
+    (ivy-count-format "(%d/%d) ")
+    (ivy-height 20)
+    :config
+    (ivy-mode 1))
+#+END_SRC
+
+#+BEGIN_QUOTE
+Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
+#+END_QUOTE
+#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-ivy.el
+  (use-package counsel
+    :straight t
+    :after ivy
+    :demand t
+    :general
+    ("M-x" 'counsel-M-x)
+    ("C-x C-f" 'counsel-find-file)
+    ("<f1> f" 'counsel-describe-function)
+    ("<f1> v" 'counsel-describe-variable)
+    ("<f1> l" 'counsel-find-library)
+    ("<f2> i" 'counsel-info-lookup-symbol)
+    ("<f2> u" 'counsel-unicode-char)
+    ("C-c g" 'counsel-git)
+    ("C-c j" 'counsel-git-grep)
+    ("C-c k" 'counsel-rg)
+    ("C-x l" 'counsel-locate)
+    ("C-S-r" 'counsel-expression-history)
+    :config
+    ;; use ripgrep for counsel-git-grep
+    (setq counsel-git-cmd "rg --files")
+    (setq counsel-rg-base-command
+          "rg -i -M 120 --no-heading --line-number --color never %s ."))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-ivy.el
+  (use-package counsel-etags
+    :straight t
+    :after counsel)
+#+END_SRC
+
+Make =ivy= look a bit nicer
+#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-ivy.el
+  (use-package ivy-rich
+    :straight t
+    :after (ivy counsel)
+    :config
+    (ivy-rich-mode 1)
+    (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+#+END_SRC
+
+Replace keybindings for emacs search with swiper.
+#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-ivy.el
+  (use-package swiper
+    :straight t
+    :after ivy
+    :general
+    ("C-s" 'swiper))
+#+END_SRC
+*** EOF
+#+begin_src emacs-lisp :tangle modules/basemacs-ivy.el
+  (provide 'basemacs-ivy)
+  ;;; basemacs-ivy.el ends here
+#+end_src
+** basemacs-helm
+#+begin_src emacs-lisp :tangle modules/basemacs-helm.el
+  (use-package helm
+    :straight t
+    :general
+    ("M-x" 'helm-M-x)
+    ("C-x r b" 'helm-filtered-bookmarks)
+    ("C-x C-f" 'helm-find-files)
+    :config
+    (helm-mode +1))
+
+  (provide 'basemacs-helm)
+  ;;; basemacs-helm.el ends here
+#+end_src
+
+* TODO Evil
+** basemacs-evil
+* TODO Programming
+** Version Control
+** Tools
+*** LSP
+** Languages
