@@ -375,90 +375,15 @@ Magit is a complete text-based user interface to Git.
     ("C-x g" 'magit-status))
 #+end_src
 
-* UI
-** rainbow-delimiters
-#+begin_quote
-=rainbow-delimiters= is a "rainbow parentheses"-like mode which highlights delimiters such as parentheses, brackets or braces according to their depth. Each successive level is highlighted in a different color. This makes it easy to spot matching delimiters, orient yourself in the code, and tell which statements are at a given depth.
-#+end_quote
-
-Turn this on only for programming modes.
+* Modules
+Load modules
 #+begin_src emacs-lisp :tangle init.el
-  (use-package rainbow-delimiters
-    :straight t
-    :ghook 'prog-mode-hook)
+  (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
 #+end_src
 
-** variable-pitch
-=variable-pitch-mode= allows us to have multiple fonts in a single buffer. This is useful for =org-mode= which can have prose, code, and other things, in the same file.
-
-Turn =variable-pitch-mode= on for =org-mode=.
 #+begin_src emacs-lisp :tangle init.el
-  (use-package face-remap
-    :straight nil
-    :ghook
-    ('org-mode-hook #'variable-pitch-mode))
-#+end_src
-
-** font
-Now we set the main font to use in all buffers, and the proportional and mono fonts in =variable-pitch-mode=.
-#+begin_src emacs-lisp :tangle init.el
-  (use-package faces
-    :straight nil
-    :config
-    ;; Main typeface
-    (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 110)
-    ;; Proportionately spaced typeface
-    (set-face-attribute 'variable-pitch nil :family "DefaVu Serif" :height 1.0)
-    ;; Monospaced typeface
-    (set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono" :height 1.0))
-#+end_src
-
-The =:height= value for the =default= face is the font size multiplied by 10, e.g. =11 x 10 = 110=. The =:height= values for the =variable-pitch= and =fixed-pitch= faces are their sizes relative to the default face. This is because they use a floating point number. An integer may be used here, but then fonts will not scale gracefully.
-
-** modus-themes
-These light and dark themes are WCAG compliant, have support for =variable-pitch-mode= in =org-mode=, and are highly customizable.
-
-Light theme
-#+begin_src emacs-lisp :tangle init.el
-  (use-package modus-operandi-theme
-    :straight t
-    :custom
-    (modus-operandi-theme-bold-constructs t)
-    (modus-operandi-theme-slanted-constructs t)
-    (modus-operandi-theme-completions 'opinionated)
-    ;; org specific settings
-    (modus-operandi-theme-org-blocks 'grayscale)
-    (modus-operandi-theme-headings '((t . rainbow)))
-    (modus-operandi-theme-scale-headings t)
-    :config
-    (load-theme 'modus-operandi))
-#+end_src
-
-Dark theme
-#+begin_src emacs-lisp :tangle init.el
-  (use-package modus-vivendi-theme
-    :straight t
-    :custom
-    (modus-vivendi-theme-bold-constructs t)
-    (modus-vivendi-theme-slanted-constructs t)
-    (modus-vivendi-theme-completions 'opinionated)
-    ;; org specific settings
-    (modus-vivendi-theme-org-blocks 'grayscale)
-    (modus-vivendi-theme-headings '((t . rainbow)))
-    (modus-vivendi-theme-scale-headings t))
-#+end_src
-
-Toggle between them
-#+begin_src emacs-lisp :tangle init.el
-  (defun modus-themes-toggle ()
-      "Toggle between `modus-operandi' and `modus-vivendi' themes."
-      (interactive)
-      (if (eq (car custom-enabled-themes) 'modus-operandi)
-          (progn
-            (disable-theme 'modus-operandi)
-            (load-theme 'modus-vivendi t))
-        (disable-theme 'modus-vivendi)
-        (load-theme 'modus-operandi t)))
+  (require 'basemacs-ui)
+  (require 'basemacs-selectrum)
 #+end_src
 
 * EOF
