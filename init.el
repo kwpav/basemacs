@@ -172,7 +172,7 @@
 (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
 
 (require 'basemacs-ui)
-(require 'basemacs-selectrum)
+(require 'basemacs-helm)
 
 (provide 'init)
 ;;; init.el ends here

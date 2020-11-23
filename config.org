@@ -376,14 +376,15 @@ Magit is a complete text-based user interface to Git.
 #+end_src
 
 * Modules
-Load modules
+In order to use these, we need to add the =modules/= directory to our load path.
 #+begin_src emacs-lisp :tangle init.el
   (add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
 #+end_src
 
+Now we can =require= the modules we want.
 #+begin_src emacs-lisp :tangle init.el
   (require 'basemacs-ui)
-  (require 'basemacs-selectrum)
+  (require 'basemacs-helm)
 #+end_src
 
 * EOF
