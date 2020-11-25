@@ -9,7 +9,7 @@
   (ivy-count-format "(%d/%d) ")
   (ivy-height 20)
   :config
-  (ivy-mode 1))
+  (ivy-mode +1))
 
 (use-package counsel
   :straight t
@@ -42,7 +42,7 @@
   :straight t
   :after (ivy counsel)
   :config
-  (ivy-rich-mode 1)
+  (ivy-rich-mode +1)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
 (use-package swiper

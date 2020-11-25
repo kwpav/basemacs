@@ -1,7 +1,9 @@
 #+TITLE: basemacs modules
 
 * About
-This is a set of "modules" for =basemacs=. As with the rest of =basemacs=, these are only a beginning point, but they are meant more as examples of what other things can be configured. These are also probably a little bit more opinionated.
+This is a set of "modules" for =basemacs=. As with the rest of =basemacs=, these are only a beginning point. They can be used as is, but they are intended to be examples of some of the cool packages and features that Emacs has to offer.
+
+They are slightly more opinionated than the initial configuration,  but are simple and easy to modify, 
 
 * UI
 The UI module contains some things that make Emacs look nicer.
@@ -97,13 +99,16 @@ Toggle between them
   ;;; basemacs-ui.el ends here
 #+end_src
 * Narrowing
-One of the biggest changes that we can make to the usability of Emacs, are these "narrowing" or "completion" frameworks. For example, when you  press =M-x=, these will give you a list of commands you can run in the minibuffer and narrow them down as you type. There are 4 major options to choose from:
-1. ido - built in, with a few extra packages it is pretty nice
-2. ivy - uses minibuffer, swiper for search results
-3. helm - featureful
-4. selectrum - like ivy, newer, simpler code
+One of the biggest changes that we can make to the usability of Emacs are these "narrowing" or "completion" frameworks. For example, when using =M-x=, Emacs is rather unhelpful as you have to know what the command is or press =<TAB>= for options. These packages make it a lot easier because they show a list of commands to choose from, as you type the choices in the list will narrow down. This is useful for lots of things in Emacs, like finding files, switching buffers, using the help, and more.
 
-Only one of these should be used at a time.
+There are 4 options to choose from:
+1. [[https://www.gnu.org/software/emacs/manual/html_mono/ido.html][ido]] - built in, with a few extra packages it is pretty nice
+2. [[https://emacs-helm.github.io/helm/][helm]] - the most features, been around for the longest (after =ido=), most different from others
+3. [[https://github.com/abo-abo/swiper][ivy]] - uses minibuffer (like =ido= does), includes =swiper= as a replacement for =isearch=
+4. [[https://github.com/raxod502/selectrum][selectrum]] - similar ivy, newer, simpler code, includes =ctrlf= as a replacement for =isearch=
+
+*NOTE* Only one of these modules should be used at a time - all of these modules all change =M-x=, and =basemacs-ivy= and =basemacs-selectrum= change =C-s=. The packages themselves can all be installed at once.
+
 ** basemacs-ido
 The built-in =ido-mode= is pretty good with some good default settings and extra packages.
 
@@ -145,32 +150,21 @@ The built-in =ido-mode= is pretty good with some good default settings and extra
   ;;; basemacs-ido.el ends here
 #+end_src
 
-** basemacs-selectrum
-#+begin_src emacs-lisp :tangle modules/basemacs-selectrum.el
-  (use-package selectrum
+** basemacs-helm
+=helm= is the most feature packed out of all the other options here. It is also the most different as it does not use the minibuffer, rather it opens up its own window.
+#+begin_src emacs-lisp :tangle modules/basemacs-helm.el
+  (use-package helm
     :straight t
+    :general
+    ("M-x" 'helm-M-x)
+    ("C-x r b" 'helm-filtered-bookmarks)
+    ("C-x C-f" 'helm-find-files)
     :config
-    (selectrum-mode +1))
+    (helm-mode +1))
 
-  (use-package prescient
-    :straight t
-    :config
-    (prescient-persist-mode +1))
-
-  (use-package selectrum-prescient
-    :straight t
-    :config
-    (selectrum-prescient-mode +1))
-
-  (use-package ctrlf
-    :straight t
-    :config
-    (ctrlf-mode +1))
-
-  (provide 'basemacs-selectrum)
-  ;;; basemacs-selectrum.el ends here
+  (provide 'basemacs-helm)
+  ;;; basemacs-helm.el ends here
 #+end_src
-
 ** basemacs-ivy
 *** Ivy / Counsel / Swiper
 #+begin_quote
@@ -189,7 +183,7 @@ Ivy is a generic completion mechanism for Emacs
     (ivy-count-format "(%d/%d) ")
     (ivy-height 20)
     :config
-    (ivy-mode 1))
+    (ivy-mode +1))
 #+END_SRC
 
 #+BEGIN_QUOTE
@@ -232,7 +226,7 @@ Make =ivy= look a bit nicer
     :straight t
     :after (ivy counsel)
     :config
-    (ivy-rich-mode 1)
+    (ivy-rich-mode +1)
     (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 #+END_SRC
 
@@ -249,23 +243,90 @@ Replace keybindings for emacs search with swiper.
   (provide 'basemacs-ivy)
   ;;; basemacs-ivy.el ends here
 #+end_src
-** basemacs-helm
-#+begin_src emacs-lisp :tangle modules/basemacs-helm.el
-  (use-package helm
-    :straight t
-    :general
-    ("M-x" 'helm-M-x)
-    ("C-x r b" 'helm-filtered-bookmarks)
-    ("C-x C-f" 'helm-find-files)
-    :config
-    (helm-mode +1))
+** basemacs-selectrum
+=selectrum= is the newest out of all the options, it is similar to ivy but with simpler code, and it was created by the author of =straight.el=.
 
-  (provide 'basemacs-helm)
-  ;;; basemacs-helm.el ends here
+#+begin_src emacs-lisp :tangle modules/basemacs-selectrum.el
+  (use-package selectrum
+    :straight t
+    :config
+    (selectrum-mode +1))
+
+  (use-package prescient
+    :straight t
+    :config
+    (prescient-persist-mode +1))
+
+  (use-package selectrum-prescient
+    :straight t
+    :config
+    (selectrum-prescient-mode +1))
+
+  (use-package ctrlf
+    :straight t
+    :config
+    (ctrlf-mode +1))
+
+  (provide 'basemacs-selectrum)
+  ;;; basemacs-selectrum.el ends here
 #+end_src
 
-* TODO Evil
+* Vim Emulation
+Go to the dark side with =evil= and get near perfect =vim= emulation.
 ** basemacs-evil
+Evil mode is vim in emacs! Using =undo-fu= here instead of =undo-tree= as I have found that =undo-fu= seems to be quicker and less buggy than =undo-tree=.
+#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-evil.el
+  (use-package evil
+    :straight t
+    :init
+    (use-package undo-fu :straight t)
+    :custom
+    (evil-want-keybinding nil)  ;; evil-collection assumes this
+    (evil-undo-system 'undo-fu)
+    :config
+    (evil-mode +1))
+#+END_SRC
+
+Use evil bindings in various modes.
+#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-evil.el
+  (use-package evil-collection
+    :straight t
+    :after evil
+    :config
+    (evil-collection-init))
+#+END_SRC
+
+surround.vim emulation.
+#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-evil.el
+  (use-package evil-surround
+    :straight t
+    :after evil
+    :config
+    (global-evil-surround-mode 1))
+#+END_SRC
+
+vim-commentary emulation
+#+begin_src emacs-lisp :tangle modules/basemacs-evil.el
+  (use-package evil-commentary
+    :straight t
+    :config
+    (evil-commentary-mode 1))
+#+end_src
+
+Use evil in the =magit-status= window
+#+begin_src emacs-lisp :tangle modules/basemacs-evil.el
+  (use-package evil-magit
+    :straight t
+    :after (magit evil))
+#+end_src
+
+#+begin_src emacs-lisp :tangle modules/basemacs-evil.el
+  (provide 'basemacs-evil)
+  ;;; basemacs-evil.el ends here
+#+end_src
+** TODO basemacs-evil-general
+Use =SPC= as the leader key.
+* TODO Version Control
 * TODO Programming
 ** Version Control
 ** Tools
