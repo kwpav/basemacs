@@ -1,9 +1,9 @@
 #+TITLE: basemacs modules
 
 * About
-This is a set of "modules" for =basemacs=. As with the rest of =basemacs=, these are only a beginning point. They can be used as is, but they are intended to be examples of some of the cool packages and features that Emacs has to offer.
+This is a set of modules for =basemacs=. As with the rest of =basemacs=, the modules are only a starting point, these even moreso. They can be used as is, but they are intended to be examples of some of the cool packages that Emacs has to offer.
 
-They are slightly more opinionated than the initial configuration,  but are simple and easy to modify, 
+They are slightly more opinionated than the initial configuration, but are simple and easy to modify.
 
 * UI
 The UI module contains some things that make Emacs look nicer.
