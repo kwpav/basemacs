@@ -4,14 +4,14 @@ An Emacs base to build on.
 * About
 =basemacs= is the (mostly) unopinionated start to an Emacs configuration -- a *base* to build on. It contains some sane defaults and uses a minimal set of packages to get you started with your own config.
 
-All configuration is done in =org= files that are tangled to =elisp=. Further configuration can be done using =org= files, or by editing the =elisp= directly.
+All configuration is done in =org= files that are tangled to =elisp=. Further configuration can be done using =org= files, or by editing =elisp= files directly.
 
 =basemacs= is meant to be simple, so fork it and hack away!
 
 If you want to know a little bit more about why I created this project, see this [[https://kwpav.github.io/posts/emacs_refinancing/][blog post]].
 
 ** Packages Used
-=basemacs= uses these small sets of packages to get started.
+=basemacs= uses a small set of packages to get started.
 
 Package management and configuration are handled with:
 - [[https://github.com/raxod502/straight.el][straight.el]] - package management
@@ -34,7 +34,7 @@ I have only tested it on OSX and Linux, but it should have no problems working i
 
 * Using
 ** Install
-The easiest way to get started is to fork it and use it as the start of your own configuration. There should be no real need to keep track of updates.
+The easiest way to get started is to fork this repository and use it as the start of your own configuration. There should be no real need to keep track of updates.
 
 After that, there are a few ways of using this:
 
@@ -77,10 +77,10 @@ You can also check out [[file:base.org][base.org]] which contains the =basemacs=
 
 * FAQ
 ** What is the difference between =basemacs= and all the other Emacs distros/starters out there?
-=basemacs= is intented to be much simpler than most others (with the exception of maybe =yay-evil=.) There are no "batteries" included (well, other than =magit= perhaps!). =basemacs= is meant as a starting point for an Emacs configuration, it can easily be modified to fit a users needs as there is no real magic going on here.
+=basemacs= is intented to be smaller and simpler than the others (with the exception of maybe =yay-evil=.) There are no "batteries" included (well, other than =magit= perhaps!). =basemacs= is meant as a starting point for an Emacs configuration, it can easily be modified to fit a users needs as there is no magic going on here.
 
 * Inspired By
-This project was inspired by all these other great Emacs configurations/distributions/whatever you want to call them:
+This project was inspired by all these other great Emacs starter kits/configurations/distributions/whatever you want to call them:
 - [[https://github.com/ianpan870102/yay-evil-emacs][yay-evil-emacs]]
 - [[https://github.com/MatthewZMD/.emacs.d][M-EMACS]]
 - [[https://github.com/hlissner/doom-emacs][doom-emacs]]
