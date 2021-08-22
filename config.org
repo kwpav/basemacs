@@ -374,7 +374,6 @@ Magit is a complete text-based user interface to Git.
     :general
     ("C-x g" 'magit-status))
 #+end_src
-
 * Modules
 In order to use these, we need to add the =modules/= directory to our load path.
 #+begin_src emacs-lisp :tangle init.el
@@ -386,7 +385,6 @@ Now we can =require= the modules we want.
   (require 'basemacs-ui)
   (require 'basemacs-helm)
 #+end_src
-
 * EOF
 That's all folks!
 #+begin_src emacs-lisp :tangle init.el
