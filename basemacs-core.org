@@ -1,0 +1,386 @@
+#+TITLE: Basemacs Base Config
+
+* What is This?
+This creates =lisp/basemacs-core.el=, which is the starting config for =basemacs=. It is where all the defaults are set.
+
+* Core
+The core of the config -- here we install =straight.el=, =use-package= and =general.el=, which are needed by everything else. We also set some sane defaults and other settings.
+** Lexical Binding
+Set up lexical binding in both =early-init.el= and =lisp/basemacs-core.el=. The files need to start with this in order for it to work.
+#+begin_src emacs-lisp :tangle early-init.el
+  ;;; early-init.el --- -*- lexical-binding: t -*-
+#+end_src
+
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  ;;; basemacs-core.el --- -*- lexical-binding: t -*-
+#+end_src
+
+** Early Init
+The =early-init.el= file was introduced in Emacs 27. It runs before =init.el=, and also before package, and UI initialization happens. Putting things in here can reduce startup time.
+
+Most of this is taken from [[https://github.com/hlissner/doom-emacs/blob/develop/early-init.el][doom-emacs early-init.el]].
+
+This prevents package initialization from happening with =package.el=. We use =straight.el= for this.
+#+begin_src emacs-lisp :tangle early-init.el
+  (setq package-enable-at-startup nil)
+  (fset #'package--ensure-init-file #'ignore)
+#+end_src
+
+Resizing the Emacs frame can be a terribly expensive part of changing the font. By inhibiting this, we easily halve startup times with fonts that are larger than the system default.
+#+begin_src emacs-lisp :tangle early-init.el
+  (setq frame-inhibit-implied-resize t)
+#+end_src
+
+Turn off the UI elements.
+#+begin_src emacs-lisp :tangle early-init.el
+  (push '(menu-bar-lines . 0) default-frame-alist)   ;; remove menubar
+  (push '(tool-bar-lines . 0) default-frame-alist)   ;; remove toolbar
+  (push '(vertical-scroll-bars) default-frame-alist) ;; remove scrollbars
+#+end_src
+
+Now we end the file.
+#+begin_src emacs-lisp :tangle early-init.el
+  (provide 'early-init)
+  ;;; early-init.el ends here
+#+end_src
+
+** Package Setup
+For packages, we use a combination of [[https://github.com/raxod502/straight.el][straight.el]]  for package management and [[https://github.com/jwiegley/use-package][use-package]] for package configuration.
+
+*** straight.el
+#+begin_quote
+*straight.el*: next-generation, purely functional package manager for the Emacs hacker.
+#+end_quote
+
+Using =straight.el= instead of the built-in =package.el= for several reasons. For this config, it is mainly because:
+- it allows for *reproducability* with =default.el=, a file that acts as a lockfile for package versions
+- we can try out packages with *ease* using =M-x straight-use-package=
+- it is *integrated* with =use-package=
+
+Install =straight.el= using the bootstrap code from it's [[https://github.com/raxod502/straight.el#getting-started][README]].
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+#+end_src
+
+This should speed things up according to the [[https://github.com/raxod502/straight.el#customizing-how-packages-are-made-available][README]]:
+#+begin_quote
+By setting the variable =straight-cache-autoloads= to a non-nil value, you can cause straight.el to cache the autoloads of all used packages in a single file on disk, and load them from there instead of from the individual package files if they are still up to date. This reduces the number of disk IO operations during startup from O(number of packages) to O(1), so it should improve performance. No other configuration should be necessary to make this work; however, you may wish to call =straight-prune-build= occasionally, since otherwise this cache file may grow quite large over time.
+#+end_quote
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (setq straight-cache-autoloads t)
+#+end_src
+
+*** use-package
+#+begin_quote
+The =use-package= macro allows you to isolate package configuration in your =.emacs= file in a way that is both performance-oriented and, well, tidy.
+#+end_quote
+
+Now we can install =use-package= using =straight.el=.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (straight-use-package 'use-package)
+#+end_src
+
+=use-package= is the heart of this config. All settings after this are configured with it. It is also integrated with =straight.el=, allowing us to install packages with =:straight t=, e.g.:
+#+begin_src emacs-lisp :tangle no
+  (use-package foo
+    :straight t
+    :custom
+    (bar-setting t)
+    :config
+    (foo-mode +1))
+#+end_src
+This example installs a package =foo= with =straight.el=, sets =bar-setting= to true, and turns on =foo-mode=. =:straight= essentially the same thing as =use-package='s built-in =:ensure=, but it uses =straight.el= to handle package installation instead of =package.el=.
+
+Gather statistics, get report with =use-package-report=.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package use-package
+    :straight nil
+    :custom
+    (use-package-compute-statistics t))
+#+end_src
+
+Note here that we use =:straight nil=. This is because =use-package= has already been installed. It is not necessarily needed, but it can be handy to explicitly differentiate between built-in and other packages, or if =straight-use-package-by-default= is set to =t=.
+
+This config uses =:straight= in all =use-package= declarations.
+
+** Keys
+*** general.el
+#+BEGIN_QUOTE
+=general.el= provides a more convenient method for binding keys in emacs ... Like =use-package= ...
+#+END_QUOTE
+
+In order to configure keys (and hooks), we use [[https://github.com/noctuid/general.el][general.el]]. It gives us the ability to customize keys hooks in =use-package= with =:general=, and add hooks using =:ghook= and =:gfhook=. It also provides a =leader= key.
+
+Set the leader key as =C-c=.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package general
+    :straight t
+    :demand t
+    :init
+    (defconst basemacs-leader "C-c")
+    :config
+    (general-create-definer base-leader-def
+      :prefix basemacs-leader))
+#+end_src
+
+*** which-key
+#+begin_quote
+=which-key= is a minor mode for Emacs that displays the key bindings following your currently entered incomplete command (a prefix) in a popup.
+#+end_quote
+
+=which-key= is a very helpful package because there are a lot of keybindings in Emacs, and this makes them easy to see. It feels like it should be built-in. 
+
+Reduce the delay to =0= to make it appear instantaneously.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package which-key
+    :straight t
+    :custom
+    (which-key-idle-delay 0)
+    :config
+    (which-key-mode +1))
+#+end_src
+
+** Sane Defaults
+Set some sane defaults.
+
+Settings for things that are defined in the C source code, so we use =emacs= as the package.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package emacs
+    :straight nil
+    :init
+    ;; answer with y/n instead of typing out yes/no
+    (defalias 'yes-or-no-p 'y-or-n-p)
+    :custom
+    ;; load new source files instead of stale elisp bytecode
+    (load-prefer-newer t)
+    ;; allow emacs to be any size, removes black bars
+    (frame-resize-pixelwise t))
+#+end_src
+
+Refresh (revert in Emacs' terms) buffers when files change on disk. Makes sure to update any version control info that changes also.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package autorevert
+    :straight nil
+    :custom
+    (global-revert-check-vc-info t)
+    :config
+    (global-auto-revert-mode +1))
+#+end_src
+
+Use utf-8 for everything.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package mule
+    :straight nil
+    :config
+    (prefer-coding-system 'utf-8)
+    (set-default-coding-systems 'utf-8)
+    (set-language-environment "UTF-8"))
+#+end_src
+
+Emacs likes to create lots of extra files for things, these settings prevent that. Also, create a newline at the end of the file on save.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package files
+    :straight nil
+    :custom
+    (make-backup-files nil)    ;; stop creating backup~ files
+    (auto-save-default nil)    ;; stop creating #autosave# files
+    (create-lockfiles nil)     ;; stop creating .# files
+    (require-final-newline t)) ;; auto add newline at the end of file
+#+end_src
+
+Use the system clipboard for killing/yanking (copying/pasting) and display column information in the modeline.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package simple
+    :straight nil
+    :custom
+    ;; killing and yanking uses the system clipboard
+    (save-interprogram-paste-before-kill t)
+    :config
+    ;; display column info in the modeline
+    (column-number-mode +1))
+#+end_src
+
+When the lines in a file are so long that performance could suffer to an unacceptable degree, we say "so long" to the slow modes and options enabled  in that buffer, and invoke something much more basic in their place.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package so-long
+    :straight nil
+    :config
+    (global-so-long-mode +1))
+#+end_src
+
+When you visit a file, point goes to the last place where it was when you previously visited the same file.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package saveplace
+    :straight nil
+    :config
+    (save-place-mode +1))
+#+end_src
+
+** Custom File
+Put customizations in =custom.el= instead of this file. This will also create =custom.el= if it does not exist yet.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package cus-edit
+    :straight nil
+    :custom
+    (custom-file (expand-file-name "custom.el" user-emacs-directory))
+    :config
+    (if (file-exists-p custom-file)
+        (load-file custom-file)))
+#+end_src
+
+** Startup
+Display the =*scratch*= buffer at startup instead of the dashboard.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package emacs
+    :straight nil
+    :custom
+    (inhibit-startup-screen t))
+#+end_src
+
+** Cursor
+Don't blink the cursor.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package frame
+    :straight nil
+    :config
+    (blink-cursor-mode -1))
+#+end_src
+
+Highlight the line the cursor is on.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package hl-line
+    :straight nil
+    :config
+    (global-hl-line-mode +1))
+#+end_src
+
+* Org Mode
+Some settings to make org-mode easier to read.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package org
+    :straight nil
+    :gfhook
+    ;; visual word wrap
+    #'visual-line-mode
+    :custom
+    ;; indent text based on outline structure
+    (org-startup-indented t))
+#+end_src
+
+* Programming
+Settings and plugins that help with programming.
+** Line Numbers
+Display line numbers in all programming modes.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package display-line-numbers
+    :straight nil
+    :ghook
+    ('prog-mode-hook #'display-line-numbers-mode))
+#+end_src
+
+** Pair Matching
+Insert matching pairs for things like parens, brackets, quotes, etc. Use it in programming and org modes.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package elec-pair
+    :straight nil
+    :ghook
+    ('prog-mode-hook #'electric-pair-mode)
+    ('org-mode-hook #'electric-pair-mode))
+#+end_src
+
+Highlight paren when the cursor is over its matching pair. Also reduce the delay of it to =0= so it will be instant.
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package paren
+    :straight nil
+    :custom
+    (show-paren-delay 0)
+    :config
+    (show-paren-mode +1))
+#+end_src
+
+** Code Completion
+*** company
+#+begin_quote
+Company is a text completion framework for Emacs.
+#+end_quote
+
+=company= is the standard package that is used for code completion. It works decently out of the box, has backends for nearly all languages, and is integrated with LSP.
+
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package company
+    :straight t
+    :config
+    (global-company-mode +1))
+#+end_src
+
+** Error Checking
+*** flycheck
+#+begin_quote
+Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs
+#+end_quote
+
+Flycheck works out of the box for just about everything and is integrated with lots of other packages.
+
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package flycheck
+    :straight t
+    :config
+    (global-flycheck-mode +1))
+#+end_src
+
+** Snippets
+*** yasnippet
+#+begin_quote
+YA Snippet is a template system for Emacs.
+#+end_quote
+
+Set the snippets directory to be in this folder, automatically create it if it does not exist.
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package yasnippet
+    :straight t
+    :preface
+    (defconst basemacs-snippets-dir (expand-file-name "snippets/" user-emacs-directory))
+    (make-directory basemacs-snippets-dir :parents)
+    :custom
+    (yas-snippet-dirs (list basemacs-snippets-dir))
+    :config
+    (yas-global-mode +1))
+#+END_SRC
+
+Install the official snippet collection, this contains snippets for several programming languages.
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package yasnippet-snippets
+    :straight t
+    :after yasnippet)
+#+END_SRC
+
+** Version Control
+*** magit
+#+begin_quote
+Magit is a complete text-based user interface to Git.
+#+end_quote
+
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package magit
+    :straight t
+    :general
+    ("C-x g" 'magit-status))
+#+end_src
+
+* EOF
+That's all folks!
+#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
+  (provide 'basemacs-core)
+  ;;; basemacs-core.el ends here
+#+end_src
