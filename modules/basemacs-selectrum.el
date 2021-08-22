@@ -1,15 +1,18 @@
 (use-package selectrum
   :straight t
-  :config
-  (selectrum-mode +1))
+  :demand t
+  :ghook
+  'after-init-hook)
 
 (use-package prescient
   :straight t
+  :after selectrum
   :config
   (prescient-persist-mode +1))
 
 (use-package selectrum-prescient
   :straight t
+  :after (selectrum prescient)
   :config
   (selectrum-prescient-mode +1))
 

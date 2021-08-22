@@ -1,15 +1,15 @@
 (use-package ivy
   :straight t
   :demand t
+  :ghook
+  'after-init-hook
   :general
   ("<f6>" 'ivy-resume)
   :custom
   (ivy-use-virtual-buffers t)
   (enable-recursive-minibuffers t)
   (ivy-count-format "(%d/%d) ")
-  (ivy-height 20)
-  :config
-  (ivy-mode +1))
+  (ivy-height 20))
 
 (use-package counsel
   :straight t
