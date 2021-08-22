@@ -25,9 +25,5 @@
   :config
   (evil-commentary-mode 1))
 
-(use-package evil-magit
-  :straight t
-  :after (magit evil))
-
 (provide 'basemacs-evil)
 ;;; basemacs-evil.el ends here

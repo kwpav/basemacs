@@ -281,13 +281,6 @@ vim-commentary emulation
     (evil-commentary-mode 1))
 #+end_src
 
-Use evil in the =magit-status= window
-#+begin_src emacs-lisp :tangle modules/basemacs-evil.el
-  (use-package evil-magit
-    :straight t
-    :after (magit evil))
-#+end_src
-
 #+begin_src emacs-lisp :tangle modules/basemacs-evil.el
   (provide 'basemacs-evil)
   ;;; basemacs-evil.el ends here
