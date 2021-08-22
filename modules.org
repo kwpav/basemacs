@@ -13,7 +13,7 @@ The UI module contains some things that make Emacs look nicer.
 #+end_quote
 
 Turn this on only for programming modes.
-#+begin_src emacs-lisp :tangle modules/basemacs-ui.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-ui.el
   (use-package rainbow-delimiters
     :straight t
     :ghook 'prog-mode-hook)
@@ -22,7 +22,7 @@ Turn this on only for programming modes.
 =variable-pitch-mode= allows us to have multiple fonts in a single buffer. This is useful for =org-mode= which can have prose, code, and other things, in the same file.
 
 Turn =variable-pitch-mode= on for =org-mode=.
-#+begin_src emacs-lisp :tangle modules/basemacs-ui.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-ui.el
   (use-package face-remap
     :straight nil
     :ghook
@@ -30,7 +30,7 @@ Turn =variable-pitch-mode= on for =org-mode=.
 #+end_src
 *** font
 Now we set the main font to use in all buffers, and the proportional and mono fonts in =variable-pitch-mode=.
-#+begin_src emacs-lisp :tangle modules/basemacs-ui.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-ui.el
   (use-package faces
     :straight nil
     :config
@@ -47,7 +47,7 @@ The =:height= value for the =default= face is the font size multiplied by 10, e.
 These light and dark themes are WCAG compliant, have support for =variable-pitch-mode= in =org-mode=, and are highly customizable.
 
 Light theme
-#+begin_src emacs-lisp :tangle modules/basemacs-ui.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-ui.el
   (use-package modus-themes
     :straight t
     :init
@@ -59,7 +59,7 @@ Light theme
     (modus-themes-load-operandi))
 #+end_src
 *** EOF
-#+begin_src emacs-lisp :tangle modules/basemacs-ui.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-ui.el
   (provide 'basemacs-ui)
   ;;; basemacs-ui.el ends here
 #+end_src
@@ -76,7 +76,7 @@ There are 4 options to choose from:
 ** basemacs-ido
 The built-in =ido-mode= is pretty good with some good default settings and extra packages.
 
-#+begin_src emacs-lisp :tangle modules/basemacs-ido.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-ido.el
   (use-package ido
     :straight nil
     :custom
@@ -86,7 +86,7 @@ The built-in =ido-mode= is pretty good with some good default settings and extra
     (ido-mode +1))
 #+end_src
 
-#+begin_src emacs-lisp :tangle modules/basemacs-ido.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-ido.el
   (use-package ido-vertical-mode
     :straight t
     :custom
@@ -95,21 +95,21 @@ The built-in =ido-mode= is pretty good with some good default settings and extra
     (ido-vertical-mode +1))
 #+end_src
 
-#+begin_src emacs-lisp :tangle modules/basemacs-ido.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-ido.el
   (use-package ido-completing-read+
     :straight t
     :config
     (ido-ubiquitous-mode +1))
 #+end_src
 
-#+begin_src emacs-lisp :tangle modules/basemacs-ido.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-ido.el
   (use-package amx
     :straight t
     :config
     (amx-mode +1))
 #+end_src
 
-#+begin_src emacs-lisp :tangle modules/basemacs-ido.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-ido.el
   (provide 'basemacs-ido)
   ;;; basemacs-ido.el ends here
 #+end_src
@@ -118,7 +118,7 @@ The built-in =ido-mode= is pretty good with some good default settings and extra
 *Helm* is an Emacs framework for incremental completions and narrowing selections.
 #+end_quote
 =helm= is the most feature packed out of all the other options here. It is also the most different as it does not use the minibuffer, rather it opens up its own window.
-#+begin_src emacs-lisp :tangle modules/basemacs-helm.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-helm.el
   (use-package helm
     :straight t
     :demand t
@@ -137,7 +137,7 @@ The built-in =ido-mode= is pretty good with some good default settings and extra
 #+begin_quote
 Ivy is a generic completion mechanism for Emacs
 #+end_quote
-#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-ivy.el
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-ivy.el
   (use-package ivy
     :straight t
     :demand t
@@ -155,7 +155,7 @@ Ivy is a generic completion mechanism for Emacs
 #+BEGIN_QUOTE
 Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
 #+END_QUOTE
-#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-ivy.el
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-ivy.el
   (use-package counsel
     :straight t
     :after ivy
@@ -180,14 +180,14 @@ Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
           "rg -i -M 120 --no-heading --line-number --color never %s ."))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-ivy.el
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-ivy.el
   (use-package counsel-etags
     :straight t
     :after counsel)
 #+END_SRC
 
 Make =ivy= look a bit nicer
-#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-ivy.el
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-ivy.el
   (use-package ivy-rich
     :straight t
     :after (ivy counsel)
@@ -197,7 +197,7 @@ Make =ivy= look a bit nicer
 #+END_SRC
 
 Replace keybindings for emacs search with swiper.
-#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-ivy.el
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-ivy.el
   (use-package swiper
     :straight t
     :after ivy
@@ -205,14 +205,14 @@ Replace keybindings for emacs search with swiper.
     ("C-s" 'swiper))
 #+END_SRC
 *** EOF
-#+begin_src emacs-lisp :tangle modules/basemacs-ivy.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-ivy.el
   (provide 'basemacs-ivy)
   ;;; basemacs-ivy.el ends here
 #+end_src
 ** basemacs-selectrum
 =selectrum= is the newest out of all the options, it is similar to ivy but with simpler code, and it was created by the author of =straight.el=.
 
-#+begin_src emacs-lisp :tangle modules/basemacs-selectrum.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-selectrum.el
   (use-package selectrum
     :straight t
     :demand t
@@ -243,7 +243,7 @@ Replace keybindings for emacs search with swiper.
 Go to the dark side with =evil= and get near perfect =vim= emulation.
 ** basemacs-evil
 Evil mode is vim in emacs! Using =undo-fu= here instead of =undo-tree= as I have found that =undo-fu= seems to be quicker and less buggy than =undo-tree=.
-#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-evil.el
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-evil.el
   (use-package evil
     :straight t
     :init
@@ -256,7 +256,7 @@ Evil mode is vim in emacs! Using =undo-fu= here instead of =undo-tree= as I have
 #+END_SRC
 
 Use evil bindings in various modes.
-#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-evil.el
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-evil.el
   (use-package evil-collection
     :straight t
     :after evil
@@ -265,7 +265,7 @@ Use evil bindings in various modes.
 #+END_SRC
 
 surround.vim emulation.
-#+BEGIN_SRC emacs-lisp :tangle modules/basemacs-evil.el
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-evil.el
   (use-package evil-surround
     :straight t
     :after evil
@@ -274,14 +274,14 @@ surround.vim emulation.
 #+END_SRC
 
 vim-commentary emulation
-#+begin_src emacs-lisp :tangle modules/basemacs-evil.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-evil.el
   (use-package evil-commentary
     :straight t
     :config
     (evil-commentary-mode 1))
 #+end_src
 
-#+begin_src emacs-lisp :tangle modules/basemacs-evil.el
+#+begin_src emacs-lisp :tangle lisp/basemacs-evil.el
   (provide 'basemacs-evil)
   ;;; basemacs-evil.el ends here
 #+end_src

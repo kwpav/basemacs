@@ -1,4 +1,4 @@
-;;; base.el --- -*- lexical-binding: t -*-
+;;; basemacs-core.el --- -*- lexical-binding: t -*-
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -169,7 +169,5 @@
   :general
   ("C-x g" 'magit-status))
 
-(add-to-list 'load-path (expand-file-name "modules" user-emacs-directory))
-
-(provide 'base)
-;;; base.el ends here
+(provide 'basemacs-core)
+;;; basemacs-core.el ends here

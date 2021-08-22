@@ -1,6 +1,8 @@
 ;;; init.el --- -*- lexical-binding: t -*-
 
-(require 'base (concat user-emacs-directory "base/base"))
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
+(require 'basemacs-core)
 
 (require 'basemacs-ui)
 (require 'basemacs-ivy)
