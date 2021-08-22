@@ -418,49 +418,19 @@ The =:height= value for the =default= face is the font size multiplied by 10, e.
 ** modus-themes
 These light and dark themes are WCAG compliant, have support for =variable-pitch-mode= in =org-mode=, and are highly customizable.
 
-Light theme
+=vivendi= is the dark theme, =operandi= is the light theme. Toggle betwen them using =modus-themes-toggle=.
+
 #+begin_src emacs-lisp :tangle init.el
-  (use-package modus-operandi-theme
+  (use-package modus-themes
     :straight t
-    :custom
-    (modus-operandi-theme-bold-constructs t)
-    (modus-operandi-theme-slanted-constructs t)
-    (modus-operandi-theme-completions 'opinionated)
-    ;; org specific settings
-    (modus-operandi-theme-org-blocks 'grayscale)
-    (modus-operandi-theme-headings '((t . rainbow)))
-    (modus-operandi-theme-scale-headings t)
+    :init
+    (setq modus-themes-italic-constructs t
+          modus-themes-bold-constructs nil
+          modus-themes-region '(bg-only no-extend))
+    (modus-themes-load-themes)
     :config
-    (load-theme 'modus-operandi))
+    (modus-themes-load-operandi))
 #+end_src
-
-Dark theme
-#+begin_src emacs-lisp :tangle init.el
-  (use-package modus-vivendi-theme
-    :straight t
-    :custom
-    (modus-vivendi-theme-bold-constructs t)
-    (modus-vivendi-theme-slanted-constructs t)
-    (modus-vivendi-theme-completions 'opinionated)
-    ;; org specific settings
-    (modus-vivendi-theme-org-blocks 'grayscale)
-    (modus-vivendi-theme-headings '((t . rainbow)))
-    (modus-vivendi-theme-scale-headings t))
-#+end_src
-
-Toggle between them
-#+begin_src emacs-lisp :tangle init.el
-  (defun modus-themes-toggle ()
-      "Toggle between `modus-operandi' and `modus-vivendi' themes."
-      (interactive)
-      (if (eq (car custom-enabled-themes) 'modus-operandi)
-          (progn
-            (disable-theme 'modus-operandi)
-            (load-theme 'modus-vivendi t))
-        (disable-theme 'modus-vivendi)
-        (load-theme 'modus-operandi t)))
-#+end_src
-
 * EOF
 That's all folks!
 #+begin_src emacs-lisp :tangle init.el
