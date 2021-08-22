@@ -4,7 +4,6 @@
 This is a set of modules for =basemacs=. As with the rest of =basemacs=, the modules are only a starting point, these even moreso. They can be used as is, but they are intended to be examples of some of the cool packages that Emacs has to offer.
 
 They are slightly more opinionated than the initial configuration, but are simple and easy to modify.
-
 * UI
 The UI module contains some things that make Emacs look nicer.
 ** basemacs-ui
@@ -19,7 +18,6 @@ Turn this on only for programming modes.
     :straight t
     :ghook 'prog-mode-hook)
 #+end_src
-
 *** variable-pitch
 =variable-pitch-mode= allows us to have multiple fonts in a single buffer. This is useful for =org-mode= which can have prose, code, and other things, in the same file.
 
@@ -30,7 +28,6 @@ Turn =variable-pitch-mode= on for =org-mode=.
     :ghook
     ('org-mode-hook #'variable-pitch-mode))
 #+end_src
-
 *** font
 Now we set the main font to use in all buffers, and the proportional and mono fonts in =variable-pitch-mode=.
 #+begin_src emacs-lisp :tangle modules/basemacs-ui.el
@@ -46,53 +43,21 @@ Now we set the main font to use in all buffers, and the proportional and mono fo
 #+end_src
 
 The =:height= value for the =default= face is the font size multiplied by 10, e.g. =11 x 10 = 110=. The =:height= values for the =variable-pitch= and =fixed-pitch= faces are their sizes relative to the default face. This is because they use a floating point number. An integer may be used here, but then fonts will not scale gracefully.
-
 *** modus-themes
 These light and dark themes are WCAG compliant, have support for =variable-pitch-mode= in =org-mode=, and are highly customizable.
 
 Light theme
 #+begin_src emacs-lisp :tangle modules/basemacs-ui.el
-  (use-package modus-operandi-theme
+  (use-package modus-themes
     :straight t
-    :custom
-    (modus-operandi-theme-bold-constructs t)
-    (modus-operandi-theme-slanted-constructs t)
-    (modus-operandi-theme-completions 'opinionated)
-    ;; org specific settings
-    (modus-operandi-theme-org-blocks 'grayscale)
-    (modus-operandi-theme-headings '((t . rainbow)))
-    (modus-operandi-theme-scale-headings t)
+    :init
+    (setq modus-themes-italic-constructs t
+          modus-themes-bold-constructs nil
+          modus-themes-region '(bg-only no-extend))
+    (modus-themes-load-themes)
     :config
-    (load-theme 'modus-operandi))
+    (modus-themes-load-operandi))
 #+end_src
-
-Dark theme
-#+begin_src emacs-lisp :tangle modules/basemacs-ui.el
-  (use-package modus-vivendi-theme
-    :straight t
-    :custom
-    (modus-vivendi-theme-bold-constructs t)
-    (modus-vivendi-theme-slanted-constructs t)
-    (modus-vivendi-theme-completions 'opinionated)
-    ;; org specific settings
-    (modus-vivendi-theme-org-blocks 'grayscale)
-    (modus-vivendi-theme-headings '((t . rainbow)))
-    (modus-vivendi-theme-scale-headings t))
-#+end_src
-
-Toggle between them
-#+begin_src emacs-lisp :tangle modules/basemacs-ui.el
-  (defun modus-themes-toggle ()
-      "Toggle between `modus-operandi' and `modus-vivendi' themes."
-      (interactive)
-      (if (eq (car custom-enabled-themes) 'modus-operandi)
-          (progn
-            (disable-theme 'modus-operandi)
-            (load-theme 'modus-vivendi t))
-        (disable-theme 'modus-vivendi)
-        (load-theme 'modus-operandi t)))
-#+end_src
-
 *** EOF
 #+begin_src emacs-lisp :tangle modules/basemacs-ui.el
   (provide 'basemacs-ui)
@@ -108,7 +73,6 @@ There are 4 options to choose from:
 4. [[https://github.com/raxod502/selectrum][selectrum]] - similar ivy, newer, simpler code, includes =ctrlf= as a replacement for =isearch=
 
 *NOTE* Only one of these modules should be used at a time - all of these modules all change =M-x=, and =basemacs-ivy= and =basemacs-selectrum= change =C-s=. The packages themselves can all be installed at once.
-
 ** basemacs-ido
 The built-in =ido-mode= is pretty good with some good default settings and extra packages.
 
@@ -149,18 +113,21 @@ The built-in =ido-mode= is pretty good with some good default settings and extra
   (provide 'basemacs-ido)
   ;;; basemacs-ido.el ends here
 #+end_src
-
 ** basemacs-helm
+#+begin_quote
+*Helm* is an Emacs framework for incremental completions and narrowing selections.
+#+end_quote
 =helm= is the most feature packed out of all the other options here. It is also the most different as it does not use the minibuffer, rather it opens up its own window.
 #+begin_src emacs-lisp :tangle modules/basemacs-helm.el
   (use-package helm
     :straight t
+    :demand t
+    :ghook
+    'after-init-hook
     :general
     ("M-x" 'helm-M-x)
     ("C-x r b" 'helm-filtered-bookmarks)
-    ("C-x C-f" 'helm-find-files)
-    :config
-    (helm-mode +1))
+    ("C-x C-f" 'helm-find-files))
 
   (provide 'basemacs-helm)
   ;;; basemacs-helm.el ends here
@@ -170,20 +137,19 @@ The built-in =ido-mode= is pretty good with some good default settings and extra
 #+begin_quote
 Ivy is a generic completion mechanism for Emacs
 #+end_quote
-
 #+BEGIN_SRC emacs-lisp :tangle modules/basemacs-ivy.el
   (use-package ivy
     :straight t
     :demand t
+    :ghook
+    'after-init-hook
     :general
     ("<f6>" 'ivy-resume)
     :custom
     (ivy-use-virtual-buffers t)
     (enable-recursive-minibuffers t)
     (ivy-count-format "(%d/%d) ")
-    (ivy-height 20)
-    :config
-    (ivy-mode +1))
+    (ivy-height 20))
 #+END_SRC
 
 #+BEGIN_QUOTE
@@ -249,16 +215,19 @@ Replace keybindings for emacs search with swiper.
 #+begin_src emacs-lisp :tangle modules/basemacs-selectrum.el
   (use-package selectrum
     :straight t
-    :config
-    (selectrum-mode +1))
+    :demand t
+    :ghook
+    'after-init-hook)
 
   (use-package prescient
     :straight t
+    :after selectrum
     :config
     (prescient-persist-mode +1))
 
   (use-package selectrum-prescient
     :straight t
+    :after (selectrum prescient)
     :config
     (selectrum-prescient-mode +1))
 
@@ -270,7 +239,6 @@ Replace keybindings for emacs search with swiper.
   (provide 'basemacs-selectrum)
   ;;; basemacs-selectrum.el ends here
 #+end_src
-
 * Vim Emulation
 Go to the dark side with =evil= and get near perfect =vim= emulation.
 ** basemacs-evil
