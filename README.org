@@ -73,7 +73,7 @@ Now that the config is in the right place, simply start up Emacs! The first time
 ** Next Steps
 Ok, we've got a basic config, now what? Check out the [[file:modules.org][modules]]! This contains a set of modules for =basemacs= that provide some extra features, such as: narrowing/completion frameworks (=helm=, =ivy=, etc.), making things look a little nicer with some themes, =vim= emulation, and more!
 
-You can also check out [[file:base.org][base.org]] which contains the =basemacs= setup and modify that if you find something you don't like. (Don't forget to tangle it!)
+You can also check out [[file:base.org][basemacs-core.org]] which contains the =basemacs= setup and modify that if you find something you don't like. (Don't forget to tangle it!)
 
 * FAQ
 ** What is the difference between =basemacs= and all the other Emacs distros/starters out there?
@@ -84,5 +84,6 @@ This project was inspired by all these other great Emacs starter kits/configurat
 - [[https://github.com/ianpan870102/yay-evil-emacs][yay-evil-emacs]]
 - [[https://github.com/MatthewZMD/.emacs.d][M-EMACS]]
 - [[https://github.com/hlissner/doom-emacs][doom-emacs]]
-- [[https://www.spacemacs.org/][spacemacs]]
-- [[https://github.com/bbatsov/prelude][prelude]]
+- [[https://www.spacemacs.org/][Spacemacs]]
+- [[https://github.com/bbatsov/prelude][Prelude]]
+- [[https://github.com/seagle0128/.emacs.d][Centaur Emacs]]
