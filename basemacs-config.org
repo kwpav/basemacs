@@ -29,11 +29,186 @@ Load the base config.
 Use the [[file:config.org][basemacs modules]] to get some extra functionality.
 
 #+begin_src emacs-lisp :tangle init.el
-  (require 'basemacs-ui)
-  (require 'basemacs-ivy)
+  (require 'kwp-ui)
+  (require 'kwp-projects)
+  (require 'kwp-lsp)
+  (require 'kwp-php)
+  (require 'basemacs-ido)
   (require 'basemacs-evil)
 #+end_src
 
+* UI
+** Theme
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  (use-package modus-themes
+    :straight t
+    :init
+    (modus-themes-load-themes)
+    :custom
+    (modus-themes-bold-constructs t)
+    (modus-themes-slanted-constructs t)
+    (modus-themes-intense-paren-match t)
+    (modus-themes-completions 'opinionated)
+    ;; org specific settings
+    (modus-themes-org-blocks 'grayscale)
+    (modus-themes-headings '((t . rainbow)))
+    (modus-themes-scale-headings t)
+    :config
+    (modus-themes-load-vivendi))
+#+end_src
+** Fonts
+#+begin_src emacs-lisp :tangle kwp-ui.el
+  (use-package faces
+    :straight nil
+    :config
+    ;; Main typeface
+    (set-face-attribute 'default nil :family "Iosevka" :height 110)
+    ;; Proportionately spaced typeface
+    (set-face-attribute 'variable-pitch nil :family "EtBembo" :height 1.0)
+    ;; Monospaced typeface
+    (set-face-attribute 'fixed-pitch nil :family "Iosevka" :height 1.0))
+#+end_src
+** Variable Pitch
+=variable-pitch-mode= allows us to have multiple fonts in a single buffer. This is useful for =org-mode= which can have prose, code, and other things, in the same file.
+
+Turn =variable-pitch-mode= on for =org-mode=.
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  (use-package face-remap
+    :straight nil
+    :ghook
+    ('org-mode-hook #'variable-pitch-mode))
+#+end_src
+** Modeline
+** EOF
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  (provide 'kwp-ui)
+  ;;; kwp-ui.el ends here
+#+end_src
+* Projects
+** Projectile
+#+begin_src emacs-lisp :tangle lisp/kwp-projects.el
+  (use-package projectile
+    :straight t
+    :config
+    (projectile-mode +1))
+#+end_src
+** Treemacs
+#+begin_src emacs-lisp :tangle lisp/kwp-projects.el
+  (use-package treemacs
+    :straight t
+    :defer t
+    :general ([f8] 'treemacs))
+
+  (use-package treemacs-evil
+    :straight t
+    :after (evil treemacs))
+
+  (use-package treemacs-projectile
+    :straight t
+    :after (projectile treemacs))
+
+  (use-package treemacs-magit
+    :straight t
+    :after (treemacs))
+#+end_src
+** EOF
+#+begin_src emacs-lisp :tangle lisp/kwp-projects.el
+  (provide 'kwp-projects)
+  ;;; kwp-projects.el ends here
+#+end_src
+* Code
+** LSP
+Setup for Microsoft's (GASP!) Language Server Protocol. Any language that uses this calls =lsp= in the language mode's =:hook= / =:ghook=
+
+#+BEGIN_QUOTE
+The Language Server Protocol (LSP) defines the protocol used between an editor or IDE and a language server that provides language features like auto complete, go to definition, find all references etc.
+#+END_QUOTE
+
+#+begin_src emacs-lisp :tangle lisp/kwp-lsp.el
+  (use-package lsp-mode
+    :straight t
+    :hook (lsp-mode . lsp-enable-which-key-integration)
+    :commands lsp
+    :custom
+    (lsp-completion-provider :capf)
+    (lsp-keymap-prefix "C-l"))
+
+  (use-package lsp-ui
+    :straight t
+    :commands lsp-ui-mode)
+
+  ;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+  (use-package lsp-treemacs
+    :straight t
+    :commands lsp-treemacs-errors-list)
+
+  (use-package dap-mode
+    :straight t)
+#+end_src
+
+Some handy links
+- https://emacs-lsp.github.io/lsp-mode/page/performance/
+
+#+begin_src emacs-lisp :tangle lisp/kwp-lsp.el
+  (provide 'kwp-lsp)
+  ;;; kwp-lsp.el ends here
+#+end_src
+** PHP
+I use PHP for my job, so I need to use the =WellspringCodingStandard=.
+#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+  (use-package php-mode
+    :straight t
+    :mode "\\.php\\'"
+    :gfhook #'my-php-setup
+    :general
+    (general-define-key
+     :keymaps 'php-mode-map
+     "C-c a" 'my/align-php-dbl-arrow)
+    :custom
+    ;; align -> on successive lines
+    (php-lineup-cascaded-calls t)
+    (flycheck-phpcs-standard "WellspringCodingStandard"))
+#+end_src
+
+Setup the default coding style and LSP for php. Need to set =lsp-enable-file-watchers= to nil because the project has a large amount of files and it causes performance issues.
+#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+  (defun my-php-setup ()
+    (php-enable-default-coding-style)
+    (setq lsp-enable-file-watchers nil)
+    (lsp))
+#+end_src
+
+Align the ==>= in arrays
+#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+  (defun my/align-php-dbl-arrow ()
+    "Align the => in arrays."
+    (interactive)
+    (align-regexp
+     (region-beginning) (region-end)
+     "\\(\\s-*\\) => " 1 0 nil))
+#+end_src
+
+Use =PHP_CodeSniffer= to format files
+#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+  (use-package phpcbf
+    :straight t
+    :after (php-mode)
+    :custom
+    (phpcbf-executable "/usr/local/bin/phpcbf")
+    (phpcbf-standard "WellspringCodingStandard"))
+#+end_src
+
+=psysh= is a php repl
+#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+  (use-package psysh
+    :straight t
+    :defer t)
+#+end_src
+
+#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+    (provide 'kwp-php)
+    ;;; kwp-php.el ends here
+#+end_src
 * EOF
 #+begin_src emacs-lisp :tangle init.el
   (provide 'init)

@@ -4,8 +4,11 @@
 
 (require 'basemacs-core)
 
-(require 'basemacs-ui)
-(require 'basemacs-ivy)
+(require 'kwp-ui)
+(require 'kwp-projects)
+(require 'kwp-lsp)
+(require 'kwp-php)
+(require 'basemacs-ido)
 (require 'basemacs-evil)
 
 (provide 'init)
