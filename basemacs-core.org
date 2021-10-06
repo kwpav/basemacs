@@ -127,11 +127,18 @@ Set the leader key as =C-c=.
   (use-package general
     :straight t
     :demand t
-    :init
-    (defconst basemacs-leader "C-c")
+    ;; :init
+    ;; (defconst basemacs-leader "C-c")
     :config
+    ;; (general-create-definer base-leader-def
+    ;;   :prefix basemacs-leader)
+    (general-evil-setup)
     (general-create-definer base-leader-def
-      :prefix basemacs-leader))
+      :states '(normal visual insert emacs)
+      :prefix "SPC")
+    (general-create-definer base-local-leader-def
+      :states '(normal visual insert emacs)
+      :prefix "SPC m"))
 #+end_src
 
 *** which-key

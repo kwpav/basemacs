@@ -287,3 +287,4 @@ vim-commentary emulation
 #+end_src
 ** TODO basemacs-evil-general
 Use =SPC= as the leader key.
+Config in =basemacs-core= for now...

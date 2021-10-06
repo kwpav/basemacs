@@ -21,7 +21,7 @@
   :straight t
   :init
   (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs nil
+        modus-themes-bold-constructs t
         modus-themes-region '(bg-only no-extend))
   (modus-themes-load-themes)
   :config

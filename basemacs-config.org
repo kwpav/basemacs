@@ -31,6 +31,7 @@ Use the [[file:config.org][basemacs modules]] to get some extra functionality.
 #+begin_src emacs-lisp :tangle init.el
   (require 'kwp-ui)
   (require 'kwp-projects)
+  (require 'kwp-windows-and-buffers)
   (require 'kwp-lsp)
   (require 'kwp-php)
   (require 'basemacs-ido)
@@ -38,6 +39,21 @@ Use the [[file:config.org][basemacs modules]] to get some extra functionality.
 #+end_src
 
 * UI
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  ;;; kwp-ui.el --- -*- lexical-binding: t -*-
+#+end_src
+** Fonts
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  (use-package faces
+    :straight nil
+    :init
+    ;; Main typeface
+    (set-face-attribute 'default nil :family "Iosevka" :height 130)
+    ;; Proportionately spaced typeface
+    (set-face-attribute 'variable-pitch nil :family "EtBembo" :height 1.0)
+    ;; Monospaced typeface
+    (set-face-attribute 'fixed-pitch nil :family "Iosevka" :height 1.0))
+#+end_src
 ** Theme
 #+begin_src emacs-lisp :tangle lisp/kwp-ui.el
   (use-package modus-themes
@@ -49,24 +65,13 @@ Use the [[file:config.org][basemacs modules]] to get some extra functionality.
     (modus-themes-slanted-constructs t)
     (modus-themes-intense-paren-match t)
     (modus-themes-completions 'opinionated)
+    (modus-themes-mixed-fonts t)
     ;; org specific settings
     (modus-themes-org-blocks 'grayscale)
     (modus-themes-headings '((t . rainbow)))
     (modus-themes-scale-headings t)
     :config
     (modus-themes-load-vivendi))
-#+end_src
-** Fonts
-#+begin_src emacs-lisp :tangle kwp-ui.el
-  (use-package faces
-    :straight nil
-    :config
-    ;; Main typeface
-    (set-face-attribute 'default nil :family "Iosevka" :height 110)
-    ;; Proportionately spaced typeface
-    (set-face-attribute 'variable-pitch nil :family "EtBembo" :height 1.0)
-    ;; Monospaced typeface
-    (set-face-attribute 'fixed-pitch nil :family "Iosevka" :height 1.0))
 #+end_src
 ** Variable Pitch
 =variable-pitch-mode= allows us to have multiple fonts in a single buffer. This is useful for =org-mode= which can have prose, code, and other things, in the same file.
@@ -84,7 +89,46 @@ Turn =variable-pitch-mode= on for =org-mode=.
   (provide 'kwp-ui)
   ;;; kwp-ui.el ends here
 #+end_src
+* Windows and Buffers
+#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
+  ;;; kwp-windows-and-buffers.el --- -*- lexical-binding: t -*-
+#+end_src
+** Keys
+#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
+  (base-leader-def
+    "b" '(:ignore t :wk "buffers")
+    "bb" 'switch-to-buffer
+    "bk" 'kill-buffer
+    "wo" 'split-window-horizontally
+    "wu" 'split-window-vertically
+    "wd" 'delete-window)
+#+end_src
+** Windmove
+Windmove provides a way to move around emacs windows.
+
+Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
+#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
+  (use-package windmove
+    :straight nil
+    :general
+    (base-leader-def
+      "w" '(:ignore t :wk "windows")
+      "wh" 'windmove-left
+      "wj" 'windmove-down
+      "wk" 'windmove-up
+      "wl" 'windmove-right)
+    :config
+    (windmove-default-keybindings))
+#+end_src
+** EOF
+#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
+  (provide 'kwp-windows-and-buffers)
+  ;;; kwp-windows-and-buffers.el ends here
+#+end_src
 * Projects
+#+begin_src emacs-lisp :tangle lisp/kwp-projects.el
+  ;;; kwp-projects.el --- -*- lexical-binding: t -*-
+#+end_src
 ** Projectile
 #+begin_src emacs-lisp :tangle lisp/kwp-projects.el
   (use-package projectile
@@ -118,6 +162,10 @@ Turn =variable-pitch-mode= on for =org-mode=.
 #+end_src
 * Code
 ** LSP
+#+begin_src emacs-lisp :tangle lisp/kwp-lsp.el
+  ;;; kwp-lsp.el --- -*- lexical-binding: t -*-
+#+end_src
+
 Setup for Microsoft's (GASP!) Language Server Protocol. Any language that uses this calls =lsp= in the language mode's =:hook= / =:ghook=
 
 #+BEGIN_QUOTE
@@ -154,6 +202,10 @@ Some handy links
   ;;; kwp-lsp.el ends here
 #+end_src
 ** PHP
+#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+  ;;; kwp-php.el --- -*- lexical-binding: t -*-
+#+end_src
+
 I use PHP for my job, so I need to use the =WellspringCodingStandard=.
 #+begin_src emacs-lisp :tangle lisp/kwp-php.el
   (use-package php-mode

@@ -25,11 +25,20 @@
 (use-package general
   :straight t
   :demand t
-  :init
-  (defconst basemacs-leader "C-c")
+  ;; :init
+  ;; (defconst basemacs-leader "C-c")
   :config
+  ;; (general-create-definer base-leader-def
+  ;;   :prefix basemacs-leader)
+  ;; prevent "Key sequence starts with a non-prefix key" errors
+  ;; (general-auto-unbind-keys)
+  (general-evil-setup)
   (general-create-definer base-leader-def
-    :prefix basemacs-leader))
+    :states '(normal visual insert emacs)
+    :prefix "SPC")
+  (general-create-definer base-local-leader-def
+    :states '(normal visual insert emacs)
+    :prefix "SPC m"))
 
 (use-package which-key
   :straight t

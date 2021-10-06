@@ -6,6 +6,7 @@
 
 (require 'kwp-ui)
 (require 'kwp-projects)
+(require 'kwp-windows-and-buffers)
 (require 'kwp-lsp)
 (require 'kwp-php)
 (require 'basemacs-ido)
