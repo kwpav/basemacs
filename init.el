@@ -2,6 +2,9 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+(defconst basemacs-leader "SPC")
+(defconst basemacs-local-leader "SPC m")
+
 (require 'basemacs-core)
 
 (require 'kwp-ui)

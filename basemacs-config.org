@@ -20,6 +20,12 @@ Add the =lisp/= directory to the =load-path= so we can load =basemacs-core=, mod
   (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 #+end_src
 
+Set up the leader keys
+#+begin_src emacs-lisp :tangle init.el
+  (defconst basemacs-leader "SPC")
+  (defconst basemacs-local-leader "SPC m")
+#+end_src
+
 Load the base config.
 #+begin_src emacs-lisp :tangle init.el
   (require 'basemacs-core)
@@ -65,12 +71,12 @@ Use the [[file:config.org][basemacs modules]] to get some extra functionality.
     (modus-themes-slanted-constructs t)
     (modus-themes-intense-paren-match t)
     (modus-themes-completions 'opinionated)
-    (modus-themes-mixed-fonts t)
     ;; org specific settings
     (modus-themes-org-blocks 'grayscale)
     (modus-themes-headings '((t . rainbow)))
     (modus-themes-scale-headings t)
     :config
+    (setq modus-themes-mixed-fonts t)
     (modus-themes-load-vivendi))
 #+end_src
 ** Variable Pitch
@@ -84,6 +90,13 @@ Turn =variable-pitch-mode= on for =org-mode=.
     ('org-mode-hook #'variable-pitch-mode))
 #+end_src
 ** Modeline
+** Rainbow Delimiters
+Add rainbow delimiters in all programming language modes
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  (use-package rainbow-delimiters
+    :straight t
+    :hook (prog-mode . rainbow-delimiters-mode))
+#+END_SRC
 ** EOF
 #+begin_src emacs-lisp :tangle lisp/kwp-ui.el
   (provide 'kwp-ui)
@@ -96,12 +109,13 @@ Turn =variable-pitch-mode= on for =org-mode=.
 ** Keys
 #+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
   (base-leader-def
-    "b" '(:ignore t :wk "buffers")
-    "bb" 'switch-to-buffer
-    "bk" 'kill-buffer
-    "wo" 'split-window-horizontally
-    "wu" 'split-window-vertically
-    "wd" 'delete-window)
+   :states 'normal
+   "b" '(:ignore t :wk "buffers")
+   "bb" 'switch-to-buffer
+   "bk" 'kill-buffer
+   "wo" 'split-window-horizontally
+   "wu" 'split-window-vertically
+   "wd" 'delete-window)
 #+end_src
 ** Windmove
 Windmove provides a way to move around emacs windows.
@@ -112,11 +126,12 @@ Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
     :straight nil
     :general
     (base-leader-def
-      "w" '(:ignore t :wk "windows")
-      "wh" 'windmove-left
-      "wj" 'windmove-down
-      "wk" 'windmove-up
-      "wl" 'windmove-right)
+     :states 'normal
+     "w" '(:ignore t :wk "windows")
+     "wh" 'windmove-left
+     "wj" 'windmove-down
+     "wk" 'windmove-up
+     "wl" 'windmove-right)
     :config
     (windmove-default-keybindings))
 #+end_src

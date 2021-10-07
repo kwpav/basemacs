@@ -30,15 +30,11 @@
   :config
   ;; (general-create-definer base-leader-def
   ;;   :prefix basemacs-leader)
-  ;; prevent "Key sequence starts with a non-prefix key" errors
-  ;; (general-auto-unbind-keys)
   (general-evil-setup)
   (general-create-definer base-leader-def
-    :states '(normal visual insert emacs)
-    :prefix "SPC")
+    :prefix basemacs-leader)
   (general-create-definer base-local-leader-def
-    :states '(normal visual insert emacs)
-    :prefix "SPC m"))
+    :prefix basemacs-local-leader))
 
 (use-package which-key
   :straight t
