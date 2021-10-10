@@ -16,6 +16,7 @@
 (require 'kwp-windows-and-buffers)
 (require 'kwp-org)
 (require 'kwp-git)
+(require 'kwp-vterm)
 (require 'kwp-lsp)
 (require 'kwp-php)
 (require 'kwp-elisp)
