@@ -1,4 +1,4 @@
-;;; kwp-windows-and-buffers.el --- -*- lexical-binding: t -*-
+;;; kpav-windows-and-buffers.el --- -*- lexical-binding: t -*-
 
 (use-package window
   :straight nil
@@ -25,5 +25,5 @@
   :config
   (windmove-default-keybindings))
 
-(provide 'kwp-windows-and-buffers)
-;;; kwp-windows-and-buffers.el ends here
+(provide 'kpav-windows-and-buffers)
+;;; kpav-windows-and-buffers.el ends here

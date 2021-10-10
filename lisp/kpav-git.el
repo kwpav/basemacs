@@ -1,4 +1,4 @@
-;;; kwp-git.el --- -*- lexical-binding: t -*-
+;;; kpav-git.el --- -*- lexical-binding: t -*-
 
 (use-package git-gutter-fringe
   :straight t
@@ -10,5 +10,5 @@
   :straight t
   :defer t)
 
-(provide 'kwp-git)
-;;; kwp-git.el ends here
+(provide 'kpav-git)
+;;; kpav-git.el ends here

@@ -1,7 +1,7 @@
-;;; kwp-org.el --- -*- lexical-binding: t -*-
+;;; kpav-org.el --- -*- lexical-binding: t -*-
 
 (use-package org
-  :straight nil
+  :straight t
   :general
   (org-src-mode-map
    [remap evil-save-and-close] 'org-edit-src-exit
@@ -22,5 +22,8 @@
   :custom
   (org-agenda-files (list "~/org/agenda/")))
 
-(provide 'kwp-org)
-;;; kwp-org.el ends here
+(use-package org-contrib
+  :straight t)
+
+(provide 'kpav-org)
+;;; kpav-org.el ends here

@@ -1,4 +1,4 @@
-;;; kwp-lsp.el --- -*- lexical-binding: t -*-
+;;; kpav-lsp.el --- -*- lexical-binding: t -*-
 
 (use-package lsp-mode
   :straight t
@@ -19,5 +19,5 @@
 (use-package dap-mode
   :straight t)
 
-(provide 'kwp-lsp)
-;;; kwp-lsp.el ends here
+(provide 'kpav-lsp)
+;;; kpav-lsp.el ends here

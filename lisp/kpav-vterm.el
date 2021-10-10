@@ -1,4 +1,4 @@
-;;; kwp-vterm.el --- -*- lexical-binding: t -*-
+;;; kpav-vterm.el --- -*- lexical-binding: t -*-
 
 (use-package vterm
   :straight t)
@@ -42,5 +42,5 @@
   (evil-define-key 'normal vterm-mode-map (kbd "o")        #'evil-insert-resume)
   (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume))
 
-(provide 'kwp-vterm)
-;;; kwp-vterm.el ends here
+(provide 'kpav-vterm)
+;;; kpav-vterm.el ends here

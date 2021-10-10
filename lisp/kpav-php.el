@@ -1,4 +1,4 @@
-;;; kwp-php.el --- -*- lexical-binding: t -*-
+;;; kpav-php.el --- -*- lexical-binding: t -*-
 
 (use-package php-mode
   :straight t
@@ -36,5 +36,5 @@
   :straight t
   :defer t)
 
-(provide 'kwp-php)
-;;; kwp-php.el ends here
+(provide 'kpav-php)
+;;; kpav-php.el ends here

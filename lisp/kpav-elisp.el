@@ -1,4 +1,4 @@
-;;; kwp-elisp.el --- -*- lexical-binding: t -*-
+;;; kpav-elisp.el --- -*- lexical-binding: t -*-
 
 (use-package emacs
   :straight nil
@@ -20,5 +20,5 @@
    "ed" 'eval-defun
    "er" 'eval-region))
 
-(provide 'kwp-elisp)
-;;; kwp-elisp.el ends here
+(provide 'kpav-elisp)
+;;; kpav-elisp.el ends here

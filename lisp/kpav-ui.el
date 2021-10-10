@@ -1,4 +1,4 @@
-;;; kwp-ui.el --- -*- lexical-binding: t -*-
+;;; kpav-ui.el --- -*- lexical-binding: t -*-
 
 (use-package faces
   :straight nil
@@ -39,5 +39,5 @@
   :straight t
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(provide 'kwp-ui)
-;;; kwp-ui.el ends here
+(provide 'kpav-ui)
+;;; kpav-ui.el ends here

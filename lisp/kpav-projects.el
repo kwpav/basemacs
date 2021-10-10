@@ -1,4 +1,4 @@
-;;; kwp-projects.el --- -*- lexical-binding: t -*-
+;;; kpav-projects.el --- -*- lexical-binding: t -*-
 
 (use-package projectile
   :straight t
@@ -22,5 +22,5 @@
   :straight t
   :after (treemacs))
 
-(provide 'kwp-projects)
-;;; kwp-projects.el ends here
+(provide 'kpav-projects)
+;;; kpav-projects.el ends here

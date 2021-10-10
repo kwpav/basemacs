@@ -5,27 +5,27 @@ This creates =init.el=, the user config. All customization should be done here.
 
 To use, create an org-mode code block and tangle it to init.el, e.g.
 #+begin_src org
-  ,#+begin_src emacs-lisp :tangle init.el
+  ,#+begin_src emacs-lisp :lexical t :tangle init.el
   ,#+end_src
 #+end_src
 
 * Startup
-#+begin_src emacs-lisp :tangle init.el
+#+begin_src emacs-lisp :lexical t :tangle init.el
   ;;; init.el --- -*- lexical-binding: t -*-
 #+end_src
 
 Add the =lisp/= directory to the =load-path= so we can load =basemacs-core=, modules, and any other custom lisp code.
-#+begin_src emacs-lisp :tangle init.el
+#+begin_src emacs-lisp :lexical t :tangle init.el
   (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 #+end_src
 
 Load the base config.
-#+begin_src emacs-lisp :tangle init.el
+#+begin_src emacs-lisp :lexical t :tangle init.el
   (require 'basemacs-core)
 #+end_src
 
 Set up the leader keys
-#+begin_src emacs-lisp :tangle init.el
+#+begin_src emacs-lisp :lexical t :tangle init.el
   (use-package emacs
     :init
     (defconst basemacs-leader "SPC")
@@ -35,28 +35,28 @@ Set up the leader keys
 * Modules
 Use the [[file:config.org][basemacs modules]] to get some extra functionality.
 
-#+begin_src emacs-lisp :tangle init.el
-  (require 'basemacs-ido)
+#+begin_src emacs-lisp :lexical t :tangle init.el
+  (require 'basemacs-selectrum)
   (require 'basemacs-evil)
-  (require 'kwp-ui)
-  (require 'kwp-projects)
-  (require 'kwp-windows-and-buffers)
-  (require 'kwp-org)
-  (require 'kwp-git)
-  (require 'kwp-vterm)
-  (require 'kwp-lsp)
-  (require 'kwp-php)
-  (require 'kwp-elisp)
+  (require 'kpav-ui)
+  (require 'kpav-projects)
+  (require 'kpav-windows-and-buffers)
+  (require 'kpav-org)
+  (require 'kpav-git)
+  (require 'kpav-vterm)
+  (require 'kpav-lsp)
+  (require 'kpav-php)
+  (require 'kpav-elisp)
 #+end_src
 * Emacs
 Things that modify Emacs stuff.
 ** UI
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
-  ;;; kwp-ui.el --- -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-ui.el
+  ;;; kpav-ui.el --- -*- lexical-binding: t -*-
 #+end_src
 *** Fonts
 Set up fonts, this is mainly for use in =variable-pitch-mode=.
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-ui.el
   (use-package faces
     :straight nil
     :init
@@ -74,7 +74,7 @@ Accessible themes for GNU Emacs, conforming with the highest standard for colour
 
 Modus themes are readable, clean looking, and super customizable. It also works very well with Org mode and Variable Pitch.
 
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-ui.el
   (use-package modus-themes
     :straight t
     :init
@@ -99,7 +99,7 @@ Modus themes are readable, clean looking, and super customizable. It also works 
 =variable-pitch-mode= allows us to have multiple fonts in a single buffer. This is useful for =org-mode= which can have prose, code, and other things, in the same file.
 
 Turn =variable-pitch-mode= on for =org-mode=.
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-ui.el
   (use-package face-remap
     :straight nil
     :ghook
@@ -108,22 +108,22 @@ Turn =variable-pitch-mode= on for =org-mode=.
 *** Modeline
 *** Rainbow Delimiters
 Add rainbow delimiters in all programming language modes
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-ui.el
   (use-package rainbow-delimiters
     :straight t
     :hook (prog-mode . rainbow-delimiters-mode))
 #+END_SRC
 *** EOF
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
-  (provide 'kwp-ui)
-  ;;; kwp-ui.el ends here
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-ui.el
+  (provide 'kpav-ui)
+  ;;; kpav-ui.el ends here
 #+end_src
 ** Windows and Buffers
-#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
-  ;;; kwp-windows-and-buffers.el --- -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-windows-and-buffers.el
+  ;;; kpav-windows-and-buffers.el --- -*- lexical-binding: t -*-
 #+end_src
 *** Keys
-#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-windows-and-buffers.el
   (use-package window
     :straight nil
     :general
@@ -141,7 +141,7 @@ Add rainbow delimiters in all programming language modes
 Windmove provides a way to move around emacs windows.
 
 Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
-#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-windows-and-buffers.el
   (use-package windmove
     :straight nil
     :general
@@ -155,22 +155,22 @@ Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
     (windmove-default-keybindings))
 #+end_src
 *** EOF
-#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
-  (provide 'kwp-windows-and-buffers)
-  ;;; kwp-windows-and-buffers.el ends here
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-windows-and-buffers.el
+  (provide 'kpav-windows-and-buffers)
+  ;;; kpav-windows-and-buffers.el ends here
 #+end_src
 ** Org Mode
-#+begin_src emacs-lisp :tangle lisp/kwp-org.el
-  ;;; kwp-org.el --- -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-org.el
+  ;;; kpav-org.el --- -*- lexical-binding: t -*-
 #+end_src
 
 - Use evil way of closing and quitting (=:q= =:x=) when editing code in org mode
 - Define some keys
 - Disable the checkdock check because most of my elisp code is in snippets in this config
   
-#+begin_src emacs-lisp :tangle lisp/kwp-org.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-org.el
   (use-package org
-    :straight nil
+    :straight t
     :general
     (org-src-mode-map
      [remap evil-save-and-close] 'org-edit-src-exit
@@ -191,20 +191,26 @@ Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
     :custom
     (org-agenda-files (list "~/org/agenda/")))
 #+end_src
+
+Install =org-contrib=
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-org.el
+  (use-package org-contrib
+    :straight t)
+#+end_src
 *** EOF
-#+begin_src emacs-lisp :tangle lisp/kwp-org.el
-  (provide 'kwp-org)
-  ;;; kwp-org.el ends here
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-org.el
+  (provide 'kpav-org)
+  ;;; kpav-org.el ends here
 #+end_src
 * Tools
 Add and configure some additional tools.
 ** Git
-#+begin_src emacs-lisp :tangle lisp/kwp-git.el
-  ;;; kwp-git.el --- -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-git.el
+  ;;; kpav-git.el --- -*- lexical-binding: t -*-
 #+end_src
 *** git-gutter-fringe
 Add git change icons in the fringe, e.g. when somethings been added, changed, or removed. Modus themes makes this look decent.
-#+begin_src emacs-lisp :tangle lisp/kwp-git.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-git.el
   (use-package git-gutter-fringe
     :straight t
     :config
@@ -213,29 +219,29 @@ Add git change icons in the fringe, e.g. when somethings been added, changed, or
 #+end_src
 *** git-timemachine
 Go through commit history on a file.
-#+begin_src emacs-lisp :tangle lisp/kwp-git.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-git.el
   (use-package git-timemachine
     :straight t
     :defer t)
 #+end_src
 *** EOF
-#+begin_src emacs-lisp :tangle lisp/kwp-git.el
-  (provide 'kwp-git)
-  ;;; kwp-git.el ends here
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-git.el
+  (provide 'kpav-git)
+  ;;; kpav-git.el ends here
 #+end_src
 ** Projects
-#+begin_src emacs-lisp :tangle lisp/kwp-projects.el
-  ;;; kwp-projects.el --- -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-projects.el
+  ;;; kpav-projects.el --- -*- lexical-binding: t -*-
 #+end_src
 *** Projectile
-#+begin_src emacs-lisp :tangle lisp/kwp-projects.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-projects.el
   (use-package projectile
     :straight t
     :config
     (projectile-mode +1))
 #+end_src
 *** Treemacs
-#+begin_src emacs-lisp :tangle lisp/kwp-projects.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-projects.el
   (use-package treemacs
     :straight t
     :defer t
@@ -254,25 +260,25 @@ Go through commit history on a file.
     :after (treemacs))
 #+end_src
 *** EOF
-#+begin_src emacs-lisp :tangle lisp/kwp-projects.el
-  (provide 'kwp-projects)
-  ;;; kwp-projects.el ends here
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-projects.el
+  (provide 'kpav-projects)
+  ;;; kpav-projects.el ends here
 #+end_src
 ** Terminal
 *** vterm
-#+begin_src emacs-lisp :tangle lisp/kwp-vterm.el
-  ;;; kwp-vterm.el --- -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-vterm.el
+  ;;; kpav-vterm.el --- -*- lexical-binding: t -*-
 #+end_src
 
 This provides a terminal emulator powered by libvterm. It is essentially a full terminal emulator.
 
-#+begin_src emacs-lisp :tangle lisp/kwp-vterm.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-vterm.el
   (use-package vterm
     :straight t)
 #+end_src
 
 Open multiple vterms. Evil configuration from it's README.
-#+begin_src emacs-lisp :tangle lisp/kwp-vterm.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-vterm.el
   (use-package multi-vterm
     :straight t
     :general
@@ -313,15 +319,15 @@ Open multiple vterms. Evil configuration from it's README.
     (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume))
 #+end_src
 
-#+begin_src emacs-lisp :tangle lisp/kwp-vterm.el
-  (provide 'kwp-vterm)
-  ;;; kwp-vterm.el ends here
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-vterm.el
+  (provide 'kpav-vterm)
+  ;;; kpav-vterm.el ends here
 #+end_src
 * Code
 Things that modify coding stuff (mostly programming langs and LSP).
 ** LSP
-#+begin_src emacs-lisp :tangle lisp/kwp-lsp.el
-  ;;; kwp-lsp.el --- -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-lsp.el
+  ;;; kpav-lsp.el --- -*- lexical-binding: t -*-
 #+end_src
 
 Setup for Microsoft's (GASP!) Language Server Protocol. Any language that uses this calls =lsp= in the language mode's =:hook= / =:ghook=
@@ -330,7 +336,7 @@ Setup for Microsoft's (GASP!) Language Server Protocol. Any language that uses t
 The Language Server Protocol (LSP) defines the protocol used between an editor or IDE and a language server that provides language features like auto complete, go to definition, find all references etc.
 #+END_QUOTE
 
-#+begin_src emacs-lisp :tangle lisp/kwp-lsp.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-lsp.el
   (use-package lsp-mode
     :straight t
     :hook (lsp-mode . lsp-enable-which-key-integration)
@@ -354,18 +360,18 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
 Some handy links
 - https://emacs-lsp.github.io/lsp-mode/page/performance/
   
-#+begin_src emacs-lisp :tangle lisp/kwp-lsp.el
-  (provide 'kwp-lsp)
-  ;;; kwp-lsp.el ends here
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-lsp.el
+  (provide 'kpav-lsp)
+  ;;; kpav-lsp.el ends here
 #+end_src
 ** Lisps
 *** Emacs Lisp
-#+begin_src emacs-lisp :tangle lisp/kwp-elisp.el
-  ;;; kwp-elisp.el --- -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-elisp.el
+  ;;; kpav-elisp.el --- -*- lexical-binding: t -*-
 #+end_src
 
 Set up keys for evaling elisp.
-#+BEGIN_SRC emacs-lisp :tangle lisp/kwp-elisp.el
+#+BEGIN_src emacs-lisp :lexical t :tangle lisp/kpav-elisp.el
   (use-package emacs
     :straight nil
     :general
@@ -387,17 +393,17 @@ Set up keys for evaling elisp.
      "er" 'eval-region))
 #+end_src
 
-#+begin_src emacs-lisp :tangle lisp/kwp-elisp.el
-  (provide 'kwp-elisp)
-  ;;; kwp-elisp.el ends here
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-elisp.el
+  (provide 'kpav-elisp)
+  ;;; kpav-elisp.el ends here
 #+end_src
 ** PHP
-#+begin_src emacs-lisp :tangle lisp/kwp-php.el
-  ;;; kwp-php.el --- -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-php.el
+  ;;; kpav-php.el --- -*- lexical-binding: t -*-
 #+end_src
 
 I use PHP for my job, so I need to use the =WellspringCodingStandard=.
-#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-php.el
   (use-package php-mode
     :straight t
     :mode "\\.php\\'"
@@ -413,7 +419,7 @@ I use PHP for my job, so I need to use the =WellspringCodingStandard=.
 #+end_src
 
 Setup the default coding style and LSP for php. Need to set =lsp-enable-file-watchers= to nil because the project has a large amount of files and it causes performance issues.
-#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-php.el
   (defun my-php-setup ()
     (php-enable-default-coding-style)
     (setq lsp-enable-file-watchers nil)
@@ -421,7 +427,7 @@ Setup the default coding style and LSP for php. Need to set =lsp-enable-file-wat
 #+end_src
 
 Align the ==>= in arrays
-#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-php.el
   (defun my/align-php-dbl-arrow ()
     "Align the => in arrays."
     (interactive)
@@ -431,7 +437,7 @@ Align the ==>= in arrays
 #+end_src
 
 Use =PHP_CodeSniffer= to format files
-#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-php.el
   (use-package phpcbf
     :straight t
     :after (php-mode)
@@ -441,18 +447,18 @@ Use =PHP_CodeSniffer= to format files
 #+end_src
 
 =psysh= is a php repl
-#+begin_src emacs-lisp :tangle lisp/kwp-php.el
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-php.el
   (use-package psysh
     :straight t
     :defer t)
 #+end_src
 
-#+begin_src emacs-lisp :tangle lisp/kwp-php.el
-    (provide 'kwp-php)
-    ;;; kwp-php.el ends here
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-php.el
+    (provide 'kpav-php)
+    ;;; kpav-php.el ends here
 #+end_src
 * EOF
-#+begin_src emacs-lisp :tangle init.el
+#+begin_src emacs-lisp :lexical t :tangle init.el
   (provide 'init)
   ;;; init.el ends here
 #+end_src
