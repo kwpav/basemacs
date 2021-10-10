@@ -203,7 +203,7 @@ Add and configure some additional tools.
   ;;; kwp-git.el --- -*- lexical-binding: t -*-
 #+end_src
 *** git-gutter-fringe
-Add git change icons in the fringe, e.g. when somethings been added, changed, or removed. =modus-themes= makes this look decent.
+Add git change icons in the fringe, e.g. when somethings been added, changed, or removed. Modus themes makes this look decent.
 #+begin_src emacs-lisp :tangle lisp/kwp-git.el
   (use-package git-gutter-fringe
     :straight t
@@ -212,7 +212,7 @@ Add git change icons in the fringe, e.g. when somethings been added, changed, or
     (setq-default fringes-outside-margins t))
 #+end_src
 *** git-timemachine
-Go through commit history on a file
+Go through commit history on a file.
 #+begin_src emacs-lisp :tangle lisp/kwp-git.el
   (use-package git-timemachine
     :straight t
@@ -282,13 +282,9 @@ Open multiple vterms. Evil configuration from it's README.
      "tt" 'multi-vterm
      "tn" 'multi-vterm-next
      "tp" 'multi-vterm-prev)
+    :gfhook #'evil-insert-state
     :config
-    (add-hook 'vterm-mode-hook
-              (lambda ()
-                ;; (setq-local evil-insert-state-cursor 'box)
-                (evil-insert-state)))
     (define-key vterm-mode-map [return]                      #'vterm-send-return)
-
     (setq vterm-keymap-exceptions nil)
     (evil-define-key 'insert vterm-mode-map (kbd "C-e")      #'vterm--self-insert)
     (evil-define-key 'insert vterm-mode-map (kbd "C-f")      #'vterm--self-insert)
