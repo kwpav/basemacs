@@ -16,9 +16,12 @@
   (modus-themes-load-themes)
   :custom
   (modus-themes-bold-constructs t)
-  (modus-themes-slanted-constructs t)
-  (modus-themes-intense-paren-match t)
+  (modus-themes-italic-constructs t)
+  (modus-themes-intense-markup t)
   (modus-themes-completions 'opinionated)
+  (modus-themes-subtle-line-numbers t)
+  (modus-themes-paren-match '(bold intense underline))
+  (modus-themes-region '(accented bg-only no-extend))
   ;; org specific settings
   (modus-themes-org-blocks 'grayscale)
   (modus-themes-headings '((t . rainbow)))

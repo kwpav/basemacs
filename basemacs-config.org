@@ -10,7 +10,6 @@ To use, create an org-mode code block and tangle it to init.el, e.g.
 #+end_src
 
 * Startup
-Set lexical binding
 #+begin_src emacs-lisp :tangle init.el
   ;;; init.el --- -*- lexical-binding: t -*-
 #+end_src
@@ -37,6 +36,8 @@ Set up the leader keys
 Use the [[file:config.org][basemacs modules]] to get some extra functionality.
 
 #+begin_src emacs-lisp :tangle init.el
+  (require 'basemacs-ido)
+  (require 'basemacs-evil)
   (require 'kwp-ui)
   (require 'kwp-projects)
   (require 'kwp-windows-and-buffers)
@@ -44,12 +45,181 @@ Use the [[file:config.org][basemacs modules]] to get some extra functionality.
   (require 'kwp-git)
   (require 'kwp-lsp)
   (require 'kwp-php)
-  (require 'basemacs-ido)
-  (require 'basemacs-evil)
+  (require 'kwp-elisp)
 #+end_src
-
 * Emacs
 Things that modify Emacs stuff.
+** UI
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  ;;; kwp-ui.el --- -*- lexical-binding: t -*-
+#+end_src
+*** Fonts
+Set up fonts, this is mainly for use in =variable-pitch-mode=.
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  (use-package faces
+    :straight nil
+    :init
+    ;; Main typeface
+    (set-face-attribute 'default nil :family "Iosevka" :height 130)
+    ;; Proportionately spaced typeface
+    (set-face-attribute 'variable-pitch nil :family "EtBembo" :height 1.0)
+    ;; Monospaced typeface
+    (set-face-attribute 'fixed-pitch nil :family "Iosevka" :height 1.0))
+#+end_src
+*** Modus Theme
+#+begin_quote
+Accessible themes for GNU Emacs, conforming with the highest standard for colour contrast between background and foreground values (WCAG AAA)
+#+end_quote
+
+Modus themes are readable, clean looking, and super customizable. It also works very well with Org mode and Variable Pitch.
+
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  (use-package modus-themes
+    :straight t
+    :init
+    (modus-themes-load-themes)
+    :custom
+    (modus-themes-bold-constructs t)
+    (modus-themes-italic-constructs t)
+    (modus-themes-intense-markup t)
+    (modus-themes-completions 'opinionated)
+    (modus-themes-subtle-line-numbers t)
+    (modus-themes-paren-match '(bold intense underline))
+    (modus-themes-region '(accented bg-only no-extend))
+    ;; org specific settings
+    (modus-themes-org-blocks 'grayscale)
+    (modus-themes-headings '((t . rainbow)))
+    (modus-themes-scale-headings t)
+    :config
+    (setq modus-themes-mixed-fonts t)
+    (modus-themes-load-vivendi))
+#+end_src
+*** Variable Pitch
+=variable-pitch-mode= allows us to have multiple fonts in a single buffer. This is useful for =org-mode= which can have prose, code, and other things, in the same file.
+
+Turn =variable-pitch-mode= on for =org-mode=.
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  (use-package face-remap
+    :straight nil
+    :ghook
+    ('org-mode-hook #'variable-pitch-mode))
+#+end_src
+*** Modeline
+*** Rainbow Delimiters
+Add rainbow delimiters in all programming language modes
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  (use-package rainbow-delimiters
+    :straight t
+    :hook (prog-mode . rainbow-delimiters-mode))
+#+END_SRC
+*** EOF
+#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
+  (provide 'kwp-ui)
+  ;;; kwp-ui.el ends here
+#+end_src
+** Windows and Buffers
+#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
+  ;;; kwp-windows-and-buffers.el --- -*- lexical-binding: t -*-
+#+end_src
+*** Keys
+#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
+  (use-package window
+    :straight nil
+    :general
+    (base-leader-def
+     :states 'normal
+     "b" '(:ignore t :wk "buffers")
+     "w" '(:ignore t :wk "windows")
+     "bb" 'switch-to-buffer
+     "bk" 'kill-buffer
+     "wo" 'split-window-horizontally
+     "wu" 'split-window-vertically
+     "wd" 'delete-window))
+#+end_src
+*** Windmove
+Windmove provides a way to move around emacs windows.
+
+Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
+#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
+  (use-package windmove
+    :straight nil
+    :general
+    (base-leader-def
+     :states 'normal
+     "wh" 'windmove-left
+     "wj" 'windmove-down
+     "wk" 'windmove-up
+     "wl" 'windmove-right)
+    :config
+    (windmove-default-keybindings))
+#+end_src
+*** EOF
+#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
+  (provide 'kwp-windows-and-buffers)
+  ;;; kwp-windows-and-buffers.el ends here
+#+end_src
+** Org Mode
+#+begin_src emacs-lisp :tangle lisp/kwp-org.el
+  ;;; kwp-org.el --- -*- lexical-binding: t -*-
+#+end_src
+
+- Use evil way of closing and quitting (=:q= =:x=) when editing code in org mode
+- Define some keys
+- Disable the checkdock check because most of my elisp code is in snippets in this config
+  
+#+begin_src emacs-lisp :tangle lisp/kwp-org.el
+  (use-package org
+    :straight nil
+    :general
+    (org-src-mode-map
+     [remap evil-save-and-close] 'org-edit-src-exit
+     [remap evil-save-modified-and-close] 'org-edit-src-exit
+     [remap evil-quit] 'org-edit-src-abort)
+    (base-leader-def
+     :states 'normal
+     "a" 'org-agenda)
+    (base-local-leader-def
+     :keymaps 'org-mode-map
+     :states 'normal
+     "b" 'org-babel-tangle)
+    :preface
+    (defun my-disable-flycheck-for-elisp ()
+      (setq flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+    :gfhook
+    ('org-src-mode-hook #'my-disable-flycheck-for-elisp)
+    :custom
+    (org-agenda-files (list "~/org/agenda/")))
+#+end_src
+*** EOF
+#+begin_src emacs-lisp :tangle lisp/kwp-org.el
+  (provide 'kwp-org)
+  ;;; kwp-org.el ends here
+#+end_src
+** Git
+#+begin_src emacs-lisp :tangle lisp/kwp-git.el
+  ;;; kwp-git.el --- -*- lexical-binding: t -*-
+#+end_src
+*** git-gutter-fringe
+Add git change icons in the fringe, e.g. when somethings been added, changed, or removed. =modus-themes= makes this look decent.
+#+begin_src emacs-lisp :tangle lisp/kwp-git.el
+  (use-package git-gutter-fringe
+    :straight t
+    :config
+    (global-git-gutter-mode +1)
+    (setq-default fringes-outside-margins t))
+#+end_src
+*** git-timemachine
+Go through commit history on a file
+#+begin_src emacs-lisp :tangle lisp/kwp-git.el
+  (use-package git-timemachine
+    :straight t
+    :defer t)
+#+end_src
+*** EOF
+#+begin_src emacs-lisp :tangle lisp/kwp-git.el
+  (provide 'kwp-git)
+  ;;; kwp-git.el ends here
+#+end_src
 ** Projects
 #+begin_src emacs-lisp :tangle lisp/kwp-projects.el
   ;;; kwp-projects.el --- -*- lexical-binding: t -*-
@@ -84,160 +254,6 @@ Things that modify Emacs stuff.
 #+begin_src emacs-lisp :tangle lisp/kwp-projects.el
   (provide 'kwp-projects)
   ;;; kwp-projects.el ends here
-#+end_src
-** Org Mode
-#+begin_src emacs-lisp :tangle lisp/kwp-org.el
-  ;;; kwp-org.el --- -*- lexical-binding: t -*-
-#+end_src
-
-#+begin_src emacs-lisp :tangle lisp/kwp-org.el
-  (use-package org
-    :straight nil
-    :general
-    (org-src-mode-map
-     [remap evil-save-and-close] 'org-edit-src-exit
-     [remap evil-save-modified-and-close] 'org-edit-src-exit
-     [remap evil-quit] 'org-edit-src-abort)
-    (base-leader-def
-     :states 'normal
-     "a" 'org-agenda)
-    (base-local-leader-def
-     :keymaps 'org-mode-map
-     :states 'normal
-     "b" 'org-babel-tangle)
-    :preface
-    (defun my-disable-flycheck-for-elisp ()
-      (setq flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
-    :gfhook
-    ('org-src-mode-hook #'my-disable-flycheck-for-elisp)
-    :custom
-    (org-agenda-files (list "~/org/agenda/")))
-#+end_src
-*** EOF
-#+begin_src emacs-lisp :tangle lisp/kwp-org.el
-  (provide 'kwp-org)
-  ;;; kwp-org.el ends here
-#+end_src
-** Windows and Buffers
-#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
-  ;;; kwp-windows-and-buffers.el --- -*- lexical-binding: t -*-
-#+end_src
-*** Keys
-#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
-  (base-leader-def
-   :states 'normal
-   "b" '(:ignore t :wk "buffers")
-   "bb" 'switch-to-buffer
-   "bk" 'kill-buffer
-   "wo" 'split-window-horizontally
-   "wu" 'split-window-vertically
-   "wd" 'delete-window)
-#+end_src
-*** Windmove
-Windmove provides a way to move around emacs windows.
-
-Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
-#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
-  (use-package windmove
-    :straight nil
-    :general
-    (base-leader-def
-     :states 'normal
-     "w" '(:ignore t :wk "windows")
-     "wh" 'windmove-left
-     "wj" 'windmove-down
-     "wk" 'windmove-up
-     "wl" 'windmove-right)
-    :config
-    (windmove-default-keybindings))
-#+end_src
-*** EOF
-#+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
-  (provide 'kwp-windows-and-buffers)
-  ;;; kwp-windows-and-buffers.el ends here
-#+end_src
-** UI
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
-  ;;; kwp-ui.el --- -*- lexical-binding: t -*-
-#+end_src
-*** Fonts
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
-  (use-package faces
-    :straight nil
-    :init
-    ;; Main typeface
-    (set-face-attribute 'default nil :family "Iosevka" :height 130)
-    ;; Proportionately spaced typeface
-    (set-face-attribute 'variable-pitch nil :family "EtBembo" :height 1.0)
-    ;; Monospaced typeface
-    (set-face-attribute 'fixed-pitch nil :family "Iosevka" :height 1.0))
-#+end_src
-*** Theme
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
-  (use-package modus-themes
-    :straight t
-    :init
-    (modus-themes-load-themes)
-    :custom
-    (modus-themes-bold-constructs t)
-    (modus-themes-slanted-constructs t)
-    (modus-themes-intense-paren-match t)
-    (modus-themes-completions 'opinionated)
-    ;; org specific settings
-    (modus-themes-org-blocks 'grayscale)
-    (modus-themes-headings '((t . rainbow)))
-    (modus-themes-scale-headings t)
-    :config
-    (setq modus-themes-mixed-fonts t)
-    (modus-themes-load-vivendi))
-#+end_src
-*** Variable Pitch
-=variable-pitch-mode= allows us to have multiple fonts in a single buffer. This is useful for =org-mode= which can have prose, code, and other things, in the same file.
-
-Turn =variable-pitch-mode= on for =org-mode=.
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
-  (use-package face-remap
-    :straight nil
-    :ghook
-    ('org-mode-hook #'variable-pitch-mode))
-#+end_src
-*** Modeline
-*** Rainbow Delimiters
-Add rainbow delimiters in all programming language modes
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
-  (use-package rainbow-delimiters
-    :straight t
-    :hook (prog-mode . rainbow-delimiters-mode))
-#+END_SRC
-*** EOF
-#+begin_src emacs-lisp :tangle lisp/kwp-ui.el
-  (provide 'kwp-ui)
-  ;;; kwp-ui.el ends here
-#+end_src
-** Git
-#+begin_src emacs-lisp :tangle lisp/kwp-git.el
-  ;;; kwp-git.el --- -*- lexical-binding: t -*-
-#+end_src
-*** git-gutter-fringe
-Add git change icons in the fringe, e.g. when somethings been added, changed, or removed. =modus-themes= makes this look decent.
-#+begin_src emacs-lisp :tangle lisp/kwp-git.el
-  (use-package git-gutter-fringe
-    :straight t
-    :config
-    (global-git-gutter-mode +1)
-    (setq-default fringes-outside-margins t))
-#+end_src
-*** git-timemachine
-Go through commit history on a file
-#+begin_src emacs-lisp :tangle lisp/kwp-git.el
-  (use-package git-timemachine
-    :straight t
-    :defer t)
-#+end_src
-*** EOF
-#+begin_src emacs-lisp :tangle lisp/kwp-git.el
-  (provide 'kwp-git)
-  ;;; kwp-git.el ends here
 #+end_src
 * Code
 Things that modify coding stuff (mostly programming langs and LSP).
@@ -275,10 +291,43 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
 
 Some handy links
 - https://emacs-lsp.github.io/lsp-mode/page/performance/
-
+  
 #+begin_src emacs-lisp :tangle lisp/kwp-lsp.el
   (provide 'kwp-lsp)
   ;;; kwp-lsp.el ends here
+#+end_src
+** Lisps
+*** Emacs Lisp
+#+begin_src emacs-lisp :tangle lisp/kwp-elisp.el
+  ;;; kwp-elisp.el --- -*- lexical-binding: t -*-
+#+end_src
+
+Set up keys for evaling elisp.
+#+BEGIN_SRC emacs-lisp :tangle lisp/kwp-elisp.el
+  (use-package emacs
+    :straight nil
+    :general
+    (base-local-leader-def
+     :states 'normal
+     :keymaps 'emacs-lisp-mode-map
+     "e" '(:ignore t :wk "eval")
+     "eb" 'eval-buffer
+     "el" 'eval-last-sexp
+     "ed" 'eval-defun
+     "er" 'eval-region)
+    (base-local-leader-def
+     :states 'normal
+     :keymaps 'lisp-interaction-mode-map
+     "e" '(:ignore t :wk "eval")
+     "eb" 'eval-buffer
+     "el" 'eval-last-sexp
+     "ed" 'eval-defun
+     "er" 'eval-region))
+#+end_src
+
+#+begin_src emacs-lisp :tangle lisp/kwp-elisp.el
+  (provide 'kwp-elisp)
+  ;;; kwp-elisp.el ends here
 #+end_src
 ** PHP
 #+begin_src emacs-lisp :tangle lisp/kwp-php.el

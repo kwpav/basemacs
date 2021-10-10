@@ -12,7 +12,6 @@
   :straight t
   :commands lsp-ui-mode)
 
-;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 (use-package lsp-treemacs
   :straight t
   :commands lsp-treemacs-errors-list)
