@@ -13,6 +13,7 @@
 (require 'kwp-projects)
 (require 'kwp-windows-and-buffers)
 (require 'kwp-org)
+(require 'kwp-git)
 (require 'kwp-lsp)
 (require 'kwp-php)
 (require 'basemacs-ido)

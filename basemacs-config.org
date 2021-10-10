@@ -41,6 +41,7 @@ Use the [[file:config.org][basemacs modules]] to get some extra functionality.
   (require 'kwp-projects)
   (require 'kwp-windows-and-buffers)
   (require 'kwp-org)
+  (require 'kwp-git)
   (require 'kwp-lsp)
   (require 'kwp-php)
   (require 'basemacs-ido)
@@ -118,8 +119,6 @@ Things that modify Emacs stuff.
   ;;; kwp-org.el ends here
 #+end_src
 ** Windows and Buffers
-Things that modify coding stuff (e.g. programming languages).
-
 #+begin_src emacs-lisp :tangle lisp/kwp-windows-and-buffers.el
   ;;; kwp-windows-and-buffers.el --- -*- lexical-binding: t -*-
 #+end_src
@@ -215,6 +214,31 @@ Add rainbow delimiters in all programming language modes
   (provide 'kwp-ui)
   ;;; kwp-ui.el ends here
 #+end_src
+** Git
+#+begin_src emacs-lisp :tangle lisp/kwp-git.el
+  ;;; kwp-git.el --- -*- lexical-binding: t -*-
+#+end_src
+*** git-gutter-fringe
+Add git change icons in the fringe, e.g. when somethings been added, changed, or removed. =modus-themes= makes this look decent.
+#+begin_src emacs-lisp :tangle lisp/kwp-git.el
+  (use-package git-gutter-fringe
+    :straight t
+    :config
+    (global-git-gutter-mode +1)
+    (setq-default fringes-outside-margins t))
+#+end_src
+*** git-timemachine
+Go through commit history on a file
+#+begin_src emacs-lisp :tangle lisp/kwp-git.el
+  (use-package git-timemachine
+    :straight t
+    :defer t)
+#+end_src
+*** EOF
+#+begin_src emacs-lisp :tangle lisp/kwp-git.el
+  (provide 'kwp-git)
+  ;;; kwp-git.el ends here
+#+end_src
 * Code
 Things that modify coding stuff (mostly programming langs and LSP).
 ** LSP
@@ -241,7 +265,6 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
     :straight t
     :commands lsp-ui-mode)
 
-  ;; (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
   (use-package lsp-treemacs
     :straight t
     :commands lsp-treemacs-errors-list)
