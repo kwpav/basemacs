@@ -33,7 +33,6 @@
  ("ht.el" . "c4c1be487d6ecb353d07881526db05d7fc90ea87")
  ("hydra" . "2d553787aca1aceb3e6927e426200e9bb9f056f1")
  ("iedit" . "2f504c966e7f640dcd6ecbf40a6a1a05ea286de0")
- ("js2-mode" . "e6a9059fc823a17496e1a5114652d92a9071a78f")
  ("json-mode" . "0e819e519ae17a2686e0881c4ca51fa873fa9b83")
  ("json-reformat" . "8eb6668ed447988aea06467ba8f42e1f2178246f")
  ("json-snatcher" . "b28d1c0670636da6db508d03872d96ffddbc10f2")

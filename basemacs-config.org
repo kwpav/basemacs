@@ -763,9 +763,10 @@ Use =PHP_CodeSniffer= to format files
   ;;; kpav-js.el --- -*- lexical-binding: t -*-
 #+end_src
 *** JavasScript
+Using the built in =js-mode=. This handles both vanilla js and =.jsx=.
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-js.el
-  (use-package js2-mode
-    :straight t
+  (use-package js-mode
+    :straight nil
     :mode "\\.js\\'"
     :interpreter "node"
     :gfhook
@@ -796,3 +797,19 @@ Use =PHP_CodeSniffer= to format files
   (provide 'init)
   ;;; init.el ends here
 #+end_src
+* TODO To Do List
+** TODO Emacs bindings in evil mode
+** TODO Test JS / TS stuff more
+** TODO Add JS REPL (skewer?)
+** TODO Add keys for LSP
+jumping and stuff
+** TODO Add Hydra
+Should probably be in =basemacs-core=
+** TODO Add keys for files, M-x, C-x?
+** TODO Add Embark?
+Looks like its useful with selectrum and co.?
+** TODO Look into Selectrum and co. config more
+See what other settings there are
+** TODO Replace this with current config!
+** TODO Look into TabNine / company-tabnine
+AI completion engine?
