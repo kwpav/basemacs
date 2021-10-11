@@ -37,7 +37,8 @@
 
 (use-package rainbow-delimiters
   :straight t
-  :hook (prog-mode . rainbow-delimiters-mode))
+  :ghook
+  ('prog-mode-hook #'rainbow-delimiters-mode))
 
 (provide 'kpav-ui)
 ;;; kpav-ui.el ends here

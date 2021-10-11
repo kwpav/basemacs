@@ -20,16 +20,18 @@
 
 (use-package ctrlf
   :straight t
-  :config
+  :general
+  (evil-normal-state-map "/" 'ctrlf-forward-default)
+  :init
   (ctrlf-mode +1))
 
-;; Enable richer annotations using the Marginalia package
 (use-package marginalia
   :straight t
   :general
   ("M-A" 'marginalia-cycle)
-  ;; (:keymaps 'minibuffer-local-map
-  ;;           ("M-A" 'marginalia-cycle))
+  (:keymaps
+   'minibuffer-local-map
+   "M-A" 'marginalia-cycle)
   :init
   (marginalia-mode +1))
 
@@ -76,11 +78,12 @@
   ("M-s u" 'consult-focus-lines)
   ;; Isearch integration
   ("M-s e" 'consult-isearch)
-  (:keymaps 'isearch-mode-map
-            "M-e" 'consult-isearch                 ;; orig. isearch-edit-string
-            "M-s e" 'consult-isearch               ;; orig. isearch-edit-string
-            "M-s l" 'consult-line                  ;; needed by consult-line to detect isearch
-            "M-s L" 'consult-line-multi)           ;; needed by consult-line to detect isearch
+  (:keymaps
+   'isearch-mode-map
+   "M-e" 'consult-isearch                 ;; orig. isearch-edit-string
+   "M-s e" 'consult-isearch               ;; orig. isearch-edit-string
+   "M-s l" 'consult-line                  ;; needed by consult-line to detect isearch
+   "M-s L" 'consult-line-multi)           ;; needed by consult-line to detect isearch
   :init
   ;; Optionally configure the register formatting. This improves the register
   ;; preview for `consult-register', `consult-register-load',

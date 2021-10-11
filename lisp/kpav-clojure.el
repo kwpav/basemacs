@@ -24,7 +24,8 @@
   :general
   (base-local-leader-def
    :states 'normal
-   :keymaps'clojure-mode-map
+   :keymaps
+   'clojure-mode-map
    "r" 'cider
    "n" 'cider-repl-set-ns
    "er" 'cider-eval-region

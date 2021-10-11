@@ -2,7 +2,8 @@
 
 (use-package lsp-mode
   :straight t
-  :hook (lsp-mode . lsp-enable-which-key-integration)
+  :gfhook
+  #'lsp-enable-which-key-integration
   :commands lsp
   :custom
   (lsp-completion-provider :capf)
