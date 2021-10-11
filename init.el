@@ -9,10 +9,10 @@
   (defconst basemacs-leader "SPC")
   (defconst basemacs-local-leader "SPC m"))
 
-(require 'basemacs-selectrum)
 (require 'basemacs-evil)
+(require 'kpav-selectrum)
 (require 'kpav-ui)
-(require 'kpav-projects)
+(require 'kpav-project)
 (require 'kpav-windows-and-buffers)
 (require 'kpav-org)
 (require 'kpav-git)
@@ -20,6 +20,7 @@
 (require 'kpav-lsp)
 (require 'kpav-php)
 (require 'kpav-elisp)
+(require 'kpav-clojure)
 
 (provide 'init)
 ;;; init.el ends here

@@ -36,10 +36,10 @@ Set up the leader keys
 Use the [[file:config.org][basemacs modules]] to get some extra functionality.
 
 #+begin_src emacs-lisp :lexical t :tangle init.el
-  (require 'basemacs-selectrum)
   (require 'basemacs-evil)
+  (require 'kpav-selectrum)
   (require 'kpav-ui)
-  (require 'kpav-projects)
+  (require 'kpav-project)
   (require 'kpav-windows-and-buffers)
   (require 'kpav-org)
   (require 'kpav-git)
@@ -47,6 +47,7 @@ Use the [[file:config.org][basemacs modules]] to get some extra functionality.
   (require 'kpav-lsp)
   (require 'kpav-php)
   (require 'kpav-elisp)
+  (require 'kpav-clojure)
 #+end_src
 * Emacs
 Things that modify Emacs stuff.
@@ -131,7 +132,8 @@ Add rainbow delimiters in all programming language modes
      :states 'normal
      "b" '(:ignore t :wk "buffers")
      "w" '(:ignore t :wk "windows")
-     "bb" 'switch-to-buffer
+     ;; "bb" 'switch-to-buffer
+     "bb" 'consult-buffer
      "bk" 'kill-buffer
      "wo" 'split-window-horizontally
      "wu" 'split-window-vertically
@@ -202,6 +204,143 @@ Install =org-contrib=
   (provide 'kpav-org)
   ;;; kpav-org.el ends here
 #+end_src
+** Selectrum
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
+  ;;; kpav-selectrum.el --- -*- lexical-binding: t -*-
+#+end_src
+
+Selectrum is a narrowing/completion system similiar to Ivy.
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
+  (use-package selectrum
+    :straight t
+    :demand t
+    :ghook
+    'after-init-hook)
+#+end_src
+
+#+begin_quote
+Filter and sort results ... by frecency (a combination of frequency and recency).
+#+end_quote
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
+  (use-package prescient
+    :straight t
+    :after selectrum
+    :config
+    (prescient-persist-mode +1))
+
+  (use-package selectrum-prescient
+    :straight t
+    :after (selectrum prescient)
+    :config
+    (selectrum-prescient-mode +1))
+#+end_src
+
+#+begin_quote
+a from scratch redesigned buffer-search interface
+#+end_quote
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
+  (use-package ctrlf
+    :straight t
+    :config
+    (ctrlf-mode +1))
+#+end_src
+
+Marginalia adds information to the completions provided by Selectrum (keybinds, info about command, etc.)
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
+  ;; Enable richer annotations using the Marginalia package
+  (use-package marginalia
+    :straight t
+    :general
+    ("M-A" 'marginalia-cycle)
+    ;; (:keymaps 'minibuffer-local-map
+    ;;           ("M-A" 'marginalia-cycle))
+    :init
+    (marginalia-mode +1))
+#+end_src
+
+#+begin_quote
+Consult provides practical commands based on the Emacs completion function completing-read.
+#+end_quote
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
+  (use-package consult
+    :straight t
+    :general
+    ;; C-c bindings (mode-specific-map)
+    ("C-c h" 'consult-history)
+    ("C-c m" 'consult-mode-command)
+    ("C-c b" 'consult-bookmark)
+    ("C-c k" 'consult-kmacro)
+    ;; C-x bindings (ctl-x-map)
+    ("C-x M-:" 'consult-complex-command)     ;; orig. repeat-complex-command
+    ("C-x b" 'consult-buffer)                ;; orig. switch-to-buffer
+    ("C-x 4 b" 'consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+    ("C-x 5 b" 'consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+    ;; Custom M-# bindings for fast register access
+    ("M-#" 'consult-register-load)
+    ("M-'" 'consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+    ("C-M-#" 'consult-register)
+    ;; Other custom bindings
+    ("M-y" 'consult-yank-pop)                ;; orig. yank-pop
+    ("<help> a" 'consult-apropos)            ;; orig. apropos-command
+    ;; M-g bindings (goto-map)
+    ("M-g e" 'consult-compile-error)
+    ("M-g f" 'consult-flymake)               ;; Alternative: consult-flycheck
+    ("M-g g" 'consult-goto-line)             ;; orig. goto-line
+    ("M-g M-g" 'consult-goto-line)           ;; orig. goto-line
+    ("M-g o" 'consult-outline)               ;; Alternative: consult-org-heading
+    ("M-g m" 'consult-mark)
+    ("M-g k" 'consult-global-mark)
+    ("M-g i" 'consult-imenu)
+    ("M-g I" 'consult-imenu-multi)
+    ;; M-s bindings (search-map)
+    ("M-s f" 'consult-find)
+    ("M-s F" 'consult-locate)
+    ("M-s g" 'consult-grep)
+    ("M-s G" 'consult-git-grep)
+    ("M-s r" 'consult-ripgrep)
+    ("M-s l" 'consult-line)
+    ("M-s L" 'consult-line-multi)
+    ("M-s m" 'consult-multi-occur)
+    ("M-s k" 'consult-keep-lines)
+    ("M-s u" 'consult-focus-lines)
+    ;; Isearch integration
+    ("M-s e" 'consult-isearch)
+    (:keymaps 'isearch-mode-map
+              "M-e" 'consult-isearch                 ;; orig. isearch-edit-string
+              "M-s e" 'consult-isearch               ;; orig. isearch-edit-string
+              "M-s l" 'consult-line                  ;; needed by consult-line to detect isearch
+              "M-s L" 'consult-line-multi)           ;; needed by consult-line to detect isearch
+    :init
+    ;; Optionally configure the register formatting. This improves the register
+    ;; preview for `consult-register', `consult-register-load',
+    ;; `consult-register-store' and the Emacs built-ins.
+    ;; (setq register-preview-delay 0
+    ;;       register-preview-function #'consult-register-format)
+
+    ;; Optionally tweak the register preview window.
+    ;; This adds thin lines, sorting and hides the mode line of the window.
+    ;; (advice-add #'register-preview :override #'consult-register-window)
+
+    ;; Optionally replace `completing-read-multiple' with an enhanced version.
+    ;; (advice-add #'completing-read-multiple :override #'consult-completing;; -read-multiple)
+
+    ;; Use Consult to select xref locations with preview
+    ;; (setq xref-show-xrefs-function #'consult-xref
+    ;;       xref-show-definitions-function #'consult-xref)
+    :config
+    ;; projectile
+    ;; (setq consult-project-root-function #'projectile-project-root)
+    ;; project.el
+    (setq consult-project-root-function
+          (lambda ()
+            (when-let (project (project-current))
+              (car (project-roots project))))))
+#+end_src
+
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
+  (provide 'kpav-selectrum)
+  ;;; kpav-selectrum.el ends here
+#+end_src
 * Tools
 Add and configure some additional tools.
 ** Git
@@ -230,18 +369,48 @@ Go through commit history on a file.
   ;;; kpav-git.el ends here
 #+end_src
 ** Projects
-#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-projects.el
-  ;;; kpav-projects.el --- -*- lexical-binding: t -*-
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-project.el
+  ;;; kpav-project.el --- -*- lexical-binding: t -*-
 #+end_src
-*** Projectile
-#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-projects.el
+*** project.el
+Built in project interaction.
+
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-project.el
+  (use-package project
+    :straight nil
+    :init
+    :general
+    (base-leader-def
+     :states 'normal
+     "p" '(:ignore t :wk "projects")
+     "pf" 'project-find-file
+     "pg" 'consult-ripgrep
+     "pG" 'consult-git-grep))
+#+end_src
+*** COMMENT Projectile
+Projectile provides some nice ways of interacting with projects.
+
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-project.el
   (use-package projectile
     :straight t
+    :init
+    (use-package ripgrep :straight t)
+    :general
+    (base-leader-def
+     :states 'normal
+     "p" '(:ignore t :wk "projects")
+     "pf" 'projectile-find-file
+     "pd" 'projectile-find-dir
+     "pb" 'projectile-switch-to-buffer
+     "pp" 'projectile-switch-project
+     "pg" 'projectile-ripgrep)
     :config
     (projectile-mode +1))
 #+end_src
 *** Treemacs
-#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-projects.el
+Treemacs provides a nice file explorer for projects.
+
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-project.el
   (use-package treemacs
     :straight t
     :defer t
@@ -251,18 +420,18 @@ Go through commit history on a file.
     :straight t
     :after (evil treemacs))
 
-  (use-package treemacs-projectile
-    :straight t
-    :after (projectile treemacs))
+  ;; (use-package treemacs-projectile
+  ;;   :straight t
+  ;;   :after (projectile treemacs))
 
   (use-package treemacs-magit
     :straight t
     :after (treemacs))
 #+end_src
 *** EOF
-#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-projects.el
-  (provide 'kpav-projects)
-  ;;; kpav-projects.el ends here
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-project.el
+  (provide 'kpav-project)
+  ;;; kpav-project.el ends here
 #+end_src
 ** Terminal
 *** vterm
@@ -396,6 +565,52 @@ Set up keys for evaling elisp.
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-elisp.el
   (provide 'kpav-elisp)
   ;;; kpav-elisp.el ends here
+#+end_src
+*** Clojure
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
+  ;;; kpav-clojure.el --- -*- lexical-binding: t -*-
+#+end_src
+
+Use LSP with all clojure-related modes.
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
+  (use-package clojure-mode
+    :straight t
+    :ghook
+    ('clojure-mode-hook #'lsp)
+    ('clojurec-mode-hook #'lsp)
+    ('clojurescript-mode #'lsp)
+    :custom
+    (lsp-enable-indentation nil)
+    :config
+    (dolist (m '(clojure-mode
+                 clojurec-mode
+                 clojurescript-mode
+                 clojurex-mode))
+      (add-to-list 'lsp-language-id-configuration `(,m . "clojure"))))
+#+end_src
+
+Cider is Clojure REPL for Emacs.
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
+  (use-package cider
+    :straight t
+    :after clojure-mode
+    :ghook
+    ('cider-repl-mode-hook #'rainbow-delimiters-mode)
+    :general
+    (base-local-leader-def
+     :states 'normal
+     :keymaps'clojure-mode-map
+     "r" 'cider
+     "n" 'cider-repl-set-ns
+     "er" 'cider-eval-region
+     "eb" 'cider-eval-buffer
+     "ef" 'cider-eval-sexp-at-point
+     "el" 'cider-eval-last-sexp))
+#+end_src
+
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
+  (provide 'kpav-clojure)
+  ;;; kpav-clojure.el ends here
 #+end_src
 ** PHP
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-php.el

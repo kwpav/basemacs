@@ -7,7 +7,8 @@
    :states 'normal
    "b" '(:ignore t :wk "buffers")
    "w" '(:ignore t :wk "windows")
-   "bb" 'switch-to-buffer
+   ;; "bb" 'switch-to-buffer
+   "bb" 'consult-buffer
    "bk" 'kill-buffer
    "wo" 'split-window-horizontally
    "wu" 'split-window-vertically
