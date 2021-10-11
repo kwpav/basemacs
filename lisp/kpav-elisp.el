@@ -1,4 +1,5 @@
 ;;; kpav-elisp.el --- -*- lexical-binding: t -*-
+(require 'kpav-lisp-core)
 
 (use-package emacs
   :straight nil

@@ -48,6 +48,7 @@ Use the [[file:config.org][basemacs modules]] to get some extra functionality.
   (require 'kpav-php)
   (require 'kpav-elisp)
   (require 'kpav-clojure)
+  (require 'kpav-common-lisp)
 #+end_src
 * Emacs
 Things that modify Emacs stuff.
@@ -534,9 +535,129 @@ Some handy links
   ;;; kpav-lsp.el ends here
 #+end_src
 ** Lisps
+*** Shared
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-lisp-core.el
+  ;;; kpav-lisp-core.el --- -*- lexical-binding: t -*-
+#+end_src
+
+Lisps can share a lot of the same config code due to the nature of the syntax.
+
+List of all lisp mode hooks. This is used to enable plugins for all of them.
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-lisp-core.el
+  (defconst my-lisp-mode-hooks
+    '(lisp-mode-hook
+      sly-mrepl-mode-hook
+      emacs-lisp-mode-hook
+      clojure-mode-hook
+      cider-repl-mode-hook))
+#+end_src
+
+Lispy provides vim-like commands to navigate and edit Lisp code.
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-lisp-core.el
+  (use-package lispy
+    :straight t
+    :ghook my-lisp-mode-hooks)
+#+end_src
+
+Automatically indent code.
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-lisp-core.el
+  (use-package aggressive-indent
+    :straight t
+    :ghook my-lisp-mode-hooks)
+#+end_src
+
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-lisp-core.el
+  (provide 'kpav-lisp-core)
+  ;;; kpav-lisp-core.el ends here
+#+end_src
+*** Clojure
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
+  ;;; kpav-clojure.el --- -*- lexical-binding: t -*-
+  (require 'kpav-lisp-core)
+#+end_src
+
+Use LSP with all clojure-related modes.
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
+  (use-package clojure-mode
+    :straight t
+    :ghook
+    ('clojure-mode-hook #'lsp)
+    ('clojurec-mode-hook #'lsp)
+    ('clojurescript-mode #'lsp)
+    :custom
+    (lsp-enable-indentation nil)
+    :config
+    (dolist (m '(clojure-mode
+                 clojurec-mode
+                 clojurescript-mode
+                 clojurex-mode))
+      (add-to-list 'lsp-language-id-configuration `(,m . "clojure"))))
+#+end_src
+
+Cider provides a Clojure REPL for Emacs.
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
+  (use-package cider
+    :straight t
+    :after clojure-mode
+    :ghook
+    ('cider-repl-mode-hook #'rainbow-delimiters-mode)
+    :general
+    (base-local-leader-def
+     :states 'normal
+     :keymaps'clojure-mode-map
+     "r" 'cider
+     "n" 'cider-repl-set-ns
+     "er" 'cider-eval-region
+     "eb" 'cider-eval-buffer
+     "ef" 'cider-eval-sexp-at-point
+     "el" 'cider-eval-last-sexp))
+#+end_src
+
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
+  (provide 'kpav-clojure)
+  ;;; kpav-clojure.el ends here
+#+end_src
+*** Common Lisp
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-common-lisp.el
+  ;;; kpav-common-lisp.el --- -*- lexical-binding: t -*-
+  (require 'kpav-lisp-core)
+#+end_src
+
+Sly provides a Common Lisp REPL for Emacs.
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-common-lisp.el
+  (use-package sly
+    :straight t
+    :defer t
+    :ghook
+    ('sly-mrepl-mode-hook #'rainbow-delimiters-mode)
+    :general
+    (base-local-leader-def
+     :states 'normal
+     :keymaps 'lisp-mode-map
+     "eb" 'sly-eval-buffer
+     "el" 'sly-eval-last-expression
+     "ed" 'sly-eval-defun
+     "er" 'sly-eval-region)
+    :custom
+    (inferior-lisp-program "/usr/bin/sbcl"))
+
+  (use-package sly-quicklisp
+    :straight t
+    :after sly)
+
+  (use-package sly-asdf
+    :straight t
+    :after sly)
+#+end_src
+
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-common-lisp.el
+  (provide 'kpav-common-lisp)
+  ;;; kpav-common-lisp.el ends here
+#+end_src
 *** Emacs Lisp
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-elisp.el
   ;;; kpav-elisp.el --- -*- lexical-binding: t -*-
+  (require 'kpav-lisp-core)
 #+end_src
 
 Set up keys for evaling elisp.
@@ -565,52 +686,6 @@ Set up keys for evaling elisp.
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-elisp.el
   (provide 'kpav-elisp)
   ;;; kpav-elisp.el ends here
-#+end_src
-*** Clojure
-#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
-  ;;; kpav-clojure.el --- -*- lexical-binding: t -*-
-#+end_src
-
-Use LSP with all clojure-related modes.
-#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
-  (use-package clojure-mode
-    :straight t
-    :ghook
-    ('clojure-mode-hook #'lsp)
-    ('clojurec-mode-hook #'lsp)
-    ('clojurescript-mode #'lsp)
-    :custom
-    (lsp-enable-indentation nil)
-    :config
-    (dolist (m '(clojure-mode
-                 clojurec-mode
-                 clojurescript-mode
-                 clojurex-mode))
-      (add-to-list 'lsp-language-id-configuration `(,m . "clojure"))))
-#+end_src
-
-Cider is Clojure REPL for Emacs.
-#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
-  (use-package cider
-    :straight t
-    :after clojure-mode
-    :ghook
-    ('cider-repl-mode-hook #'rainbow-delimiters-mode)
-    :general
-    (base-local-leader-def
-     :states 'normal
-     :keymaps'clojure-mode-map
-     "r" 'cider
-     "n" 'cider-repl-set-ns
-     "er" 'cider-eval-region
-     "eb" 'cider-eval-buffer
-     "ef" 'cider-eval-sexp-at-point
-     "el" 'cider-eval-last-sexp))
-#+end_src
-
-#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
-  (provide 'kpav-clojure)
-  ;;; kpav-clojure.el ends here
 #+end_src
 ** PHP
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-php.el

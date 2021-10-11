@@ -1,4 +1,5 @@
 ;;; kpav-clojure.el --- -*- lexical-binding: t -*-
+(require 'kpav-lisp-core)
 
 (use-package clojure-mode
   :straight t

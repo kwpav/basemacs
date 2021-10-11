@@ -21,6 +21,7 @@
 (require 'kpav-php)
 (require 'kpav-elisp)
 (require 'kpav-clojure)
+(require 'kpav-common-lisp)
 
 (provide 'init)
 ;;; init.el ends here
