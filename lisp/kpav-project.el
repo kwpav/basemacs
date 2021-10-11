@@ -2,7 +2,6 @@
 
 (use-package project
   :straight nil
-  :init
   :general
   (base-leader-def
    :states 'normal

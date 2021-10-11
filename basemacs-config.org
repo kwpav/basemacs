@@ -35,19 +35,23 @@ Set up the leader keys
 Use the [[file:config.org][basemacs modules]] to get some extra functionality.
 
 #+begin_src emacs-lisp :lexical t :tangle init.el
+  ;; emacs
   (require 'basemacs-evil)
   (require 'kpav-selectrum)
   (require 'kpav-ui)
-  (require 'kpav-project)
   (require 'kpav-windows-and-buffers)
   (require 'kpav-org)
+  ;; tools
+  (require 'kpav-project)
   (require 'kpav-git)
   (require 'kpav-vterm)
+  ;; code
   (require 'kpav-lsp)
   (require 'kpav-php)
   (require 'kpav-elisp)
   (require 'kpav-clojure)
   (require 'kpav-common-lisp)
+  (require 'kpav-js)
 #+end_src
 * Emacs
 Things that modify Emacs stuff.
@@ -546,7 +550,7 @@ Some handy links
 
 Lisps can share a lot of the same config code due to the nature of the syntax.
 
-List of all lisp mode hooks. This is used to enable plugins for all of them.
+List of all lisp mode hooks. This is used to enable modes for all of them.
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-lisp-core.el
   (defconst my-lisp-mode-hooks
     '(lisp-mode-hook
@@ -584,18 +588,20 @@ Use LSP with all clojure-related modes.
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-clojure.el
   (use-package clojure-mode
     :straight t
+    :defer t
     :ghook
     ('clojure-mode-hook #'lsp)
     ('clojurec-mode-hook #'lsp)
     ('clojurescript-mode #'lsp)
     :custom
-    (lsp-enable-indentation nil)
-    :config
-    (dolist (m '(clojure-mode
-                 clojurec-mode
-                 clojurescript-mode
-                 clojurex-mode))
-      (add-to-list 'lsp-language-id-configuration `(,m . "clojure"))))
+    (lsp-enable-indentation nil))
+  ;; is this needed?
+  ;; :config
+  ;; (dolist (m '(clojure-mode
+  ;;              clojurec-mode
+  ;;              clojurescript-mode
+  ;;              clojurex-mode))
+  ;;   (add-to-list 'lsp-language-id-configuration `(,m . "clojure")))
 #+end_src
 
 Cider provides a Clojure REPL for Emacs.
@@ -751,6 +757,39 @@ Use =PHP_CodeSniffer= to format files
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-php.el
     (provide 'kpav-php)
     ;;; kpav-php.el ends here
+#+end_src
+** JavaScript / TypeScript
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-js.el
+  ;;; kpav-js.el --- -*- lexical-binding: t -*-
+#+end_src
+*** JavasScript
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-js.el
+  (use-package js2-mode
+    :straight t
+    :mode "\\.js\\'"
+    :interpreter "node"
+    :gfhook
+    #'lsp)
+#+end_src
+*** TypeScript
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-js.el
+  (use-package typescript-mode
+    :straight t
+    :mode "\\.ts\\'"
+    :commands (typescript-mode)
+    :gfhook
+    #'lsp)
+#+end_src
+*** JSON
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-js.el
+  (use-package json-mode
+    :straight t
+    :mode "\\.json\\'")
+#+end_src
+*** EOF
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-js.el
+  (provide 'kpav-js)
+  ;;; kpav-js.el ends here
 #+end_src
 * EOF
 #+begin_src emacs-lisp :lexical t :tangle init.el
