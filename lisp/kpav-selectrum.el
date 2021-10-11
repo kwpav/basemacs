@@ -15,7 +15,7 @@
 (use-package selectrum-prescient
   :straight t
   :after (selectrum prescient)
-  :config
+  :init
   (selectrum-prescient-mode +1))
 
 (use-package ctrlf

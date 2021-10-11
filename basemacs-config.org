@@ -208,11 +208,12 @@ Install =org-contrib=
   (provide 'kpav-org)
   ;;; kpav-org.el ends here
 #+end_src
-** Selectrum
+** Selectrum & Co.
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
   ;;; kpav-selectrum.el --- -*- lexical-binding: t -*-
 #+end_src
-
+Set up Selectrum and various packages that play well with it.
+*** Selectrum
 Selectrum is a narrowing/completion system similiar to Ivy.
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
   (use-package selectrum
@@ -235,10 +236,10 @@ Filter and sort results ... by frecency (a combination of frequency and recency)
   (use-package selectrum-prescient
     :straight t
     :after (selectrum prescient)
-    :config
+    :init
     (selectrum-prescient-mode +1))
 #+end_src
-
+*** ctrlf
 #+begin_quote
 a from scratch redesigned buffer-search interface
 #+end_quote
@@ -250,7 +251,7 @@ a from scratch redesigned buffer-search interface
     :init
     (ctrlf-mode +1))
 #+end_src
-
+*** Marginalia
 Marginalia adds information to the completions provided by Selectrum (keybinds, info about command, etc.)
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
   (use-package marginalia
@@ -263,7 +264,7 @@ Marginalia adds information to the completions provided by Selectrum (keybinds, 
     :init
     (marginalia-mode +1))
 #+end_src
-
+*** Consult
 #+begin_quote
 Consult provides practical commands based on the Emacs completion function completing-read.
 #+end_quote
@@ -291,7 +292,7 @@ Keys copied from projects README.
     ("<help> a" 'consult-apropos)            ;; orig. apropos-command
     ;; M-g bindings (goto-map)
     ("M-g e" 'consult-compile-error)
-    ("M-g f" 'consult-flymake)               ;; Alternative: consult-flycheck
+    ("M-g f" 'consult-flycheck)              ;; Alternative: consult-flycheck
     ("M-g g" 'consult-goto-line)             ;; orig. goto-line
     ("M-g M-g" 'consult-goto-line)           ;; orig. goto-line
     ("M-g o" 'consult-outline)               ;; Alternative: consult-org-heading
@@ -344,7 +345,7 @@ Keys copied from projects README.
             (when-let (project (project-current))
               (car (project-roots project))))))
 #+end_src
-
+*** EOF
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
   (provide 'kpav-selectrum)
   ;;; kpav-selectrum.el ends here
