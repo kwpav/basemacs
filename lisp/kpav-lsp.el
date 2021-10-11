@@ -18,7 +18,8 @@
   :commands lsp-treemacs-errors-list)
 
 (use-package dap-mode
-  :straight t)
+  :straight t
+  :defer t)
 
 (provide 'kpav-lsp)
 ;;; kpav-lsp.el ends here

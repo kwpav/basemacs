@@ -382,7 +382,6 @@ Built in project interaction.
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-project.el
   (use-package project
     :straight nil
-    :init
     :general
     (base-leader-def
      :states 'normal
@@ -528,7 +527,8 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
     :commands lsp-treemacs-errors-list)
 
   (use-package dap-mode
-    :straight t)
+    :straight t
+    :defer t)
 #+end_src
 
 Some handy links
