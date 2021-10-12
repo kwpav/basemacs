@@ -25,5 +25,10 @@
 (use-package org-contrib
   :straight t)
 
+(use-package org-superstar
+  :straight t
+  :ghook
+  ('org-mode-hook (lambda () (org-superstar-mode +1))))
+
 (provide 'kpav-org)
 ;;; kpav-org.el ends here

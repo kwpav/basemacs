@@ -203,6 +203,14 @@ Install =org-contrib=
   (use-package org-contrib
     :straight t)
 #+end_src
+
+Prettify headings and lists with =org-superstar-mode=
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-org.el
+  (use-package org-superstar
+    :straight t
+    :ghook
+    ('org-mode-hook (lambda () (org-superstar-mode +1))))
+#+end_src
 *** EOF
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-org.el
   (provide 'kpav-org)
@@ -392,6 +400,8 @@ Built in project interaction.
      :states 'normal
      "p" '(:ignore t :wk "projects")
      "pf" 'project-find-file
+     "pp" 'project-switch-project
+     "pb" 'project-switch-to-buffer
      "pg" 'consult-ripgrep
      "pG" 'consult-git-grep))
 #+end_src
