@@ -13,21 +13,21 @@
 (use-package modus-themes
   :straight t
   :init
+  (setq modus-themes-mixed-fonts t
+        modus-themes-bold-constructs t
+        modus-themes-italic-constructs t
+        modus-themes-intense-markup t
+        modus-themes-completions 'opinionated
+        modus-themes-subtle-line-numbers t
+        modus-themes-syntax '(faint alt-syntax)
+        modus-themes-paren-match '(bold intense underline)
+        modus-themes-region '(accented bg-only no-extend)
+        ;; org specific settings
+        modus-themes-org-blocks 'grayscale
+        modus-themes-headings '((t . rainbow))
+        modus-themes-scale-headings t)
   (modus-themes-load-themes)
-  :custom
-  (modus-themes-bold-constructs t)
-  (modus-themes-italic-constructs t)
-  (modus-themes-intense-markup t)
-  (modus-themes-completions 'opinionated)
-  (modus-themes-subtle-line-numbers t)
-  (modus-themes-paren-match '(bold intense underline))
-  (modus-themes-region '(accented bg-only no-extend))
-  ;; org specific settings
-  (modus-themes-org-blocks 'grayscale)
-  (modus-themes-headings '((t . rainbow)))
-  (modus-themes-scale-headings t)
   :config
-  (setq modus-themes-mixed-fonts t)
   (modus-themes-load-vivendi))
 
 (use-package face-remap

@@ -60,10 +60,7 @@ Things that modify Emacs stuff.
   ;;; kpav-evil.el --- -*- lexical-binding: t -*-
 #+end_src
 
-Vim in Emacs!
-
 Evil mode is vim in emacs! Using =undo-fu= here instead of =undo-tree= as I have found that =undo-fu= seems to be quicker and less buggy than =undo-tree=.
-
 #+begin_src emacs-lisp :tangle lisp/kpav-evil.el
   (use-package evil
     :straight t
@@ -78,8 +75,16 @@ Evil mode is vim in emacs! Using =undo-fu= here instead of =undo-tree= as I have
     (setq evil-insert-state-map (make-sparse-keymap))
     (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state))
 #+end_src
-
 The bit about using Emacs keybinds in evil mode is from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
+
+Use evil keys in various modes..
+#+begin_src emacs-lisp :tangle lisp/kpav-evil.el
+  (use-package evil-collection
+    :straight t
+    :after evil
+    :config
+    (evil-collection-init))
+#+end_src
 
 surround.vim emulation.
 #+begin_src emacs-lisp :tangle lisp/kpav-evil.el
@@ -129,21 +134,21 @@ Modus themes are readable, clean looking, and super customizable. It also works 
   (use-package modus-themes
     :straight t
     :init
+    (setq modus-themes-mixed-fonts t
+          modus-themes-bold-constructs t
+          modus-themes-italic-constructs t
+          modus-themes-intense-markup t
+          modus-themes-completions 'opinionated
+          modus-themes-subtle-line-numbers t
+          modus-themes-syntax '(faint alt-syntax)
+          modus-themes-paren-match '(bold intense underline)
+          modus-themes-region '(accented bg-only no-extend)
+          ;; org specific settings
+          modus-themes-org-blocks 'grayscale
+          modus-themes-headings '((t . rainbow))
+          modus-themes-scale-headings t)
     (modus-themes-load-themes)
-    :custom
-    (modus-themes-bold-constructs t)
-    (modus-themes-italic-constructs t)
-    (modus-themes-intense-markup t)
-    (modus-themes-completions 'opinionated)
-    (modus-themes-subtle-line-numbers t)
-    (modus-themes-paren-match '(bold intense underline))
-    (modus-themes-region '(accented bg-only no-extend))
-    ;; org specific settings
-    (modus-themes-org-blocks 'grayscale)
-    (modus-themes-headings '((t . rainbow)))
-    (modus-themes-scale-headings t)
     :config
-    (setq modus-themes-mixed-fonts t)
     (modus-themes-load-vivendi))
 #+end_src
 *** Variable Pitch
