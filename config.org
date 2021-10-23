@@ -875,7 +875,7 @@ Using the built in =js-mode=. This handles both vanilla js and =.jsx=.
   ;;; init.el ends here
 #+end_src
 * TODO To Do List
-** TODO Emacs bindings in evil mode
+** DONE Emacs bindings in evil mode
 ** TODO Test JS / TS stuff more
 ** TODO Add JS REPL (skewer?)
 ** TODO Add keys for LSP
@@ -883,10 +883,16 @@ jumping and stuff
 ** TODO Add Hydra
 Should probably be in =basemacs-core=
 ** TODO Add keys for files, M-x, C-x?
+e.g. ~SPC f~
 ** TODO Add Embark?
 Looks like its useful with selectrum and co.?
 ** TODO Look into Selectrum and co. config more
 See what other settings there are
-** TODO Replace this with current config!
+** TODO Replace this with current config! [1/2]
+*** DONE Use it locally
+*** TODO Create github repo
+make note in dotfiles/ repo about it
+** TODO Bookmark keys
+** TODO Git keys
 ** TODO Look into TabNine / company-tabnine
 AI completion engine?
