@@ -35,6 +35,21 @@
   :ghook
   ('org-mode-hook #'variable-pitch-mode))
 
+(use-package all-the-icons
+  :straight t
+  :defer t)
+
+(use-package doom-modeline
+  :straight t
+  :demand t
+  :preface
+  :init
+  (column-number-mode +1)
+  (doom-modeline-mode +1)
+  :custom
+  (doom-modeline-vcs-max-length 50)
+  (doom-modeline-buffer-file-name-style 'truncate-upto-project))
+
 (use-package rainbow-delimiters
   :straight t
   :ghook

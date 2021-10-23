@@ -1,14 +1,7 @@
-#+TITLE: Basemacs User Config
+#+TITLE: Emacs Config
 
 * About
-This creates =init.el=, the user config. All customization should be done here.
-
-To use, create an org-mode code block and tangle it to init.el, e.g.
-#+begin_src org
-  ,#+begin_src emacs-lisp :lexical t :tangle init.el
-  ,#+end_src
-#+end_src
-
+This is my personal Emacs configuration using =basemacs= at its core. All code here is tangled, it creates: =early-init.el=, =init.el=, and various "modules" in the =lisp/= directory.
 * Startup
 #+begin_src emacs-lisp :lexical t :tangle init.el
   ;;; init.el --- -*- lexical-binding: t -*-
@@ -32,8 +25,7 @@ Set up the leader keys
     (defconst basemacs-local-leader "SPC m"))
 #+end_src
 * Modules
-Use the [[file:config.org][basemacs modules]] to get some extra functionality.
-
+Here is where the magic happens. Let's load some modules!
 #+begin_src emacs-lisp :lexical t :tangle init.el
   ;; emacs
   (require 'kpav-evil)
@@ -53,6 +45,7 @@ Use the [[file:config.org][basemacs modules]] to get some extra functionality.
   (require 'kpav-common-lisp)
   (require 'kpav-js)
 #+end_src
+This approach requires a bit more code than having this file just tangle to =init.el=, but I like the ability to easily turn on/off things for tinkering and debugging purposes.
 * Emacs
 Things that modify Emacs stuff.
 ** Evil Mode
@@ -162,6 +155,29 @@ Turn =variable-pitch-mode= on for =org-mode=.
     ('org-mode-hook #'variable-pitch-mode))
 #+end_src
 *** Modeline
+Set up for =doom-modeline=. Nice looking modeline that plays well with evil and lots of other stuff.
+
+You need to run =M-x all-the-icons-install-fonts= to get the fancy fonts in the modeline
+
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-ui.el
+  (use-package all-the-icons
+    :straight t
+    :defer t)
+#+end_src
+
+=column-number-mode= displays the cursors current line on the modeline
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-ui.el
+  (use-package doom-modeline
+    :straight t
+    :demand t
+    :preface
+    :init
+    (column-number-mode +1)
+    (doom-modeline-mode +1)
+    :custom
+    (doom-modeline-vcs-max-length 50)
+    (doom-modeline-buffer-file-name-style 'truncate-upto-project))
+#+end_src
 *** Rainbow Delimiters
 Add rainbow delimiters in all programming language modes
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-ui.el
