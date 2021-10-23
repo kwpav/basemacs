@@ -36,7 +36,7 @@ Use the [[file:config.org][basemacs modules]] to get some extra functionality.
 
 #+begin_src emacs-lisp :lexical t :tangle init.el
   ;; emacs
-  (require 'basemacs-evil)
+  (require 'kpav-evil)
   (require 'kpav-selectrum)
   (require 'kpav-ui)
   (require 'kpav-windows-and-buffers)
@@ -55,6 +55,53 @@ Use the [[file:config.org][basemacs modules]] to get some extra functionality.
 #+end_src
 * Emacs
 Things that modify Emacs stuff.
+** Evil Mode
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-evil.el
+  ;;; kpav-evil.el --- -*- lexical-binding: t -*-
+#+end_src
+
+Vim in Emacs!
+
+Evil mode is vim in emacs! Using =undo-fu= here instead of =undo-tree= as I have found that =undo-fu= seems to be quicker and less buggy than =undo-tree=.
+
+#+begin_src emacs-lisp :tangle lisp/kpav-evil.el
+  (use-package evil
+    :straight t
+    :init
+    (use-package undo-fu :straight t)
+    :custom
+    (evil-want-keybinding nil)  ;; evil-collection assumes this
+    (evil-undo-system 'undo-fu)
+    :config
+    (evil-mode +1)
+    ;; turn on Emacs keybinds in evil mode
+    (setq evil-insert-state-map (make-sparse-keymap))
+    (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state))
+#+end_src
+
+The bit about using Emacs keybinds in evil mode is from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
+
+surround.vim emulation.
+#+begin_src emacs-lisp :tangle lisp/kpav-evil.el
+  (use-package evil-surround
+    :straight t
+    :after evil
+    :config
+    (global-evil-surround-mode +1))
+#+end_src
+
+vim-commentary emulation
+#+begin_src emacs-lisp :tangle lisp/kpav-evil.el
+  (use-package evil-commentary
+    :straight t
+    :config
+    (evil-commentary-mode +1))
+#+end_src
+
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-evil.el
+  (provide 'kpav-evil)
+  ;;; kpav-evil.el ends here
+#+end_src
 ** UI
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-ui.el
   ;;; kpav-ui.el --- -*- lexical-binding: t -*-

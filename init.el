@@ -10,7 +10,7 @@
   (defconst basemacs-local-leader "SPC m"))
 
 ;; emacs
-(require 'basemacs-evil)
+(require 'kpav-evil)
 (require 'kpav-selectrum)
 (require 'kpav-ui)
 (require 'kpav-windows-and-buffers)
