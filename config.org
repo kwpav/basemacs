@@ -59,9 +59,9 @@ Evil mode is vim in emacs! Using =undo-fu= here instead of =undo-tree= as I have
     :straight t
     :init
     (use-package undo-fu :straight t)
-    :custom
-    (evil-want-keybinding nil)  ;; evil-collection assumes this
-    (evil-undo-system 'undo-fu)
+    ;; :custom
+    (setq evil-want-keybinding nil)  ;; evil-collection assumes this
+    (setq evil-undo-system 'undo-fu)
     :config
     (evil-mode +1)
     ;; turn on Emacs keybinds in evil mode
@@ -251,17 +251,20 @@ Default keybindings are: ~S-arrowkey~ (e.g. ~S-Left~) to move around
      [remap evil-save-modified-and-close] 'org-edit-src-exit
      [remap evil-quit] 'org-edit-src-abort)
     (base-leader-def
-     :states 'normal
-     "a" 'org-agenda)
+      :states 'normal
+      "a" 'org-agenda)
     (base-local-leader-def
-     :keymaps 'org-mode-map
-     :states 'normal
-     "b" 'org-babel-tangle)
+      :keymaps 'org-mode-map
+      :states 'normal
+      "b" 'org-babel-tangle)
     :preface
     (defun my-disable-flycheck-for-elisp ()
       (setq flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
     :gfhook
     ('org-src-mode-hook #'my-disable-flycheck-for-elisp)
+    #'visual-line-mode
+    :init
+    (setq org-startup-indented t)
     :custom
     (org-agenda-files (list "~/org/agenda/")))
 #+end_src
@@ -426,11 +429,49 @@ Keys copied from projects README.
   (provide 'kpav-selectrum)
   ;;; kpav-selectrum.el ends here
 #+end_src
+** Random
+Stop warnings buffer from automatically coming up.
+#+begin_src emacs-lisp :lexical t :tangle init.el
+  (use-package emacs
+    :straight nil
+    :init
+    (setq native-comp-async-report-warnings-errors nil))
+#+end_src
 * Tools
 Add and configure some additional tools.
 ** Git
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-git.el
   ;;; kpav-git.el --- -*- lexical-binding: t -*-
+#+end_src
+*** magit
+#+begin_src emacs-lisp :lexical t :tangle lisp/kpav-git.el
+  (use-package magit
+    :straight t
+    :defer t
+    :general
+    ("C-x g" 'magit-status)
+    (base-leader-def
+      :states 'normal
+      "g" '(:ignore t :wk "git")
+      "gs" 'magit-status
+      "gc" 'magit-checkout
+      "gC" 'magit-commit
+      "gb" 'magit-blame
+      "gS" 'magit-stage-file
+      "gU" 'magit-unstage-file
+      "gg" 'hydra-my-git-menu/body
+      "gy" 'my/magit-yank-branch-name)
+    :custom
+    (magit-completing-read-function 'ivy-completing-read)
+    :config
+    (defun my/magit-yank-branch-name ()
+      "Show the current branch in the echo-area and add it to the `kill-ring'."
+      (interactive)
+      (let ((branch (magit-get-current-branch)))
+        (if branch
+            (progn (kill-new branch)
+                   (message "%s" branch))
+          (user-error "There is not current branch")))))
 #+end_src
 *** git-gutter-fringe
 Add git change icons in the fringe, e.g. when somethings been added, changed, or removed. Modus themes makes this look decent.
@@ -896,3 +937,6 @@ make note in dotfiles/ repo about it
 ** TODO Git keys
 ** TODO Look into TabNine / company-tabnine
 AI completion engine?
+** TODO Remove org from =basemacs-core= OR set :straight t
+conflicts with other org customization
+** TODO Remove magit from =basemacs-core=?

@@ -27,5 +27,10 @@
 (require 'kpav-common-lisp)
 (require 'kpav-js)
 
+(use-package emacs
+  :straight nil
+  :init
+  (setq native-comp-async-report-warnings-errors nil))
+
 (provide 'init)
 ;;; init.el ends here

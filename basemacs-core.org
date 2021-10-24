@@ -270,19 +270,6 @@ Highlight the line the cursor is on.
     (global-hl-line-mode +1))
 #+end_src
 
-* Org Mode
-Some settings to make org-mode easier to read.
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package org
-    :straight nil
-    :gfhook
-    ;; visual word wrap
-    #'visual-line-mode
-    :custom
-    ;; indent text based on outline structure
-    (org-startup-indented t))
-#+end_src
-
 * Programming
 Settings and plugins that help with programming.
 ** Line Numbers
@@ -369,19 +356,6 @@ Install the official snippet collection, this contains snippets for several prog
     :straight t
     :after yasnippet)
 #+END_SRC
-
-** Version Control
-*** magit
-#+begin_quote
-Magit is a complete text-based user interface to Git.
-#+end_quote
-
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package magit
-    :straight t
-    :general
-    ("C-x g" 'magit-status))
-#+end_src
 
 * EOF
 That's all folks!

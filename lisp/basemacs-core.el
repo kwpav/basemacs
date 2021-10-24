@@ -118,15 +118,6 @@
   :config
   (global-hl-line-mode +1))
 
-(use-package org
-  :straight nil
-  :gfhook
-  ;; visual word wrap
-  #'visual-line-mode
-  :custom
-  ;; indent text based on outline structure
-  (org-startup-indented t))
-
 (use-package display-line-numbers
   :straight nil
   :ghook
@@ -168,11 +159,6 @@
 (use-package yasnippet-snippets
   :straight t
   :after yasnippet)
-
-(use-package magit
-  :straight t
-  :general
-  ("C-x g" 'magit-status))
 
 (provide 'basemacs-core)
 ;;; basemacs-core.el ends here
