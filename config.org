@@ -59,10 +59,8 @@ Evil mode is vim in emacs! Using =undo-fu= here instead of =undo-tree= as I have
     :straight t
     :general
     ;; make <tab> expand things in org mode for evil
-    (general-define-key
-     :states 'normal
-     :keymaps 'org-mode-map
-     "<tab>" 'org-cycle)
+    (general-nmap org-mode-map
+      "<tab>" 'org-cycle)
     :init
     (use-package undo-fu :straight t)
     (setq evil-want-keybinding nil ;; evil-collection assumes this
@@ -327,6 +325,10 @@ Filter and sort results ... by frecency (a combination of frequency and recency)
 #+begin_quote
 a from scratch redesigned buffer-search interface
 #+end_quote
+
+A replacement for the built in I-Search. This replaces the evil search and the built in search. The bit in =general= handles evil and =ctrlf-mode= automatically redefines =C-s=.
+- ~C-s~ - forward search
+- ~C-r~ - backward search
 #+begin_src emacs-lisp :lexical t :tangle lisp/kpav-selectrum.el
   (use-package ctrlf
     :straight t
@@ -470,7 +472,7 @@ Make ~ESC~ close any prompts
   (use-package emacs
     :straight nil
     :general
-    (general-define-key "<escape>" 'keyboard-escape-quit))
+    ("<escape>" 'keyboard-escape-quit))
 #+end_src
 
 Stop warnings buffer from automatically coming up. (Emacs 28)
@@ -865,9 +867,8 @@ I use PHP for my job, so I need to use the =WellspringCodingStandard=.
     :mode "\\.php\\'"
     :gfhook #'my-php-setup
     :general
-    (general-define-key
-     :keymaps 'php-mode-map
-     "C-c a" 'my/align-php-dbl-arrow)
+    (:keymaps 'php-mode-map
+      "C-c a" 'my/align-php-dbl-arrow)
     :custom
     ;; align -> on successive lines
     (php-lineup-cascaded-calls t)

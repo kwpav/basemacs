@@ -30,7 +30,7 @@
 (use-package emacs
   :straight nil
   :general
-  (general-define-key "<escape>" 'keyboard-escape-quit))
+  ("<escape>" 'keyboard-escape-quit))
 
 (use-package emacs
   :straight nil

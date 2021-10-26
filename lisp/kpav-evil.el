@@ -4,10 +4,8 @@
   :straight t
   :general
   ;; make <tab> expand things in org mode for evil
-  (general-define-key
-   :states 'normal
-   :keymaps 'org-mode-map
-   "<tab>" 'org-cycle)
+  (general-nmap org-mode-map
+    "<tab>" 'org-cycle)
   :init
   (use-package undo-fu :straight t)
   (setq evil-want-keybinding nil ;; evil-collection assumes this

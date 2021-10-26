@@ -5,9 +5,8 @@
   :mode "\\.php\\'"
   :gfhook #'my-php-setup
   :general
-  (general-define-key
-   :keymaps 'php-mode-map
-   "C-c a" 'my/align-php-dbl-arrow)
+  (:keymaps 'php-mode-map
+    "C-c a" 'my/align-php-dbl-arrow)
   :custom
   ;; align -> on successive lines
   (php-lineup-cascaded-calls t)
