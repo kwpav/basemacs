@@ -59,9 +59,8 @@ Evil mode is vim in emacs! Using =undo-fu= here instead of =undo-tree= as I have
     :straight t
     :init
     (use-package undo-fu :straight t)
-    ;; :custom
-    (setq evil-want-keybinding nil)  ;; evil-collection assumes this
-    (setq evil-undo-system 'undo-fu)
+    (setq evil-want-keybinding nil ;; evil-collection assumes this
+          evil-undo-system 'undo-fu)
     :config
     (evil-mode +1)
     ;; turn on Emacs keybinds in evil mode
@@ -326,7 +325,7 @@ a from scratch redesigned buffer-search interface
   (use-package ctrlf
     :straight t
     :general
-    (evil-normal-state-map "/" 'ctrlf-forward-default)
+    (evil-normal-state-map "/" 'ctrlf-forward-fuzzy-regexp)
     :init
     (ctrlf-mode +1))
 #+end_src
@@ -402,8 +401,8 @@ Keys copied from projects README.
     ;; Optionally configure the register formatting. This improves the register
     ;; preview for `consult-register', `consult-register-load',
     ;; `consult-register-store' and the Emacs built-ins.
-    ;; (setq register-preview-delay 0
-    ;;       register-preview-function #'consult-register-format)
+    (setq register-preview-delay 0
+          register-preview-function #'consult-register-format)
 
     ;; Optionally tweak the register preview window.
     ;; This adds thin lines, sorting and hides the mode line of the window.
@@ -430,7 +429,15 @@ Keys copied from projects README.
   ;;; kpav-selectrum.el ends here
 #+end_src
 ** Random
-Stop warnings buffer from automatically coming up.
+Make ~ESC~ close any prompts
+#+begin_src emacs-lisp :lexical t :tangle init.el
+  (use-package emacs
+    :straight nil
+    :general
+    (general-define-key "<escape>" 'keyboard-escape-quit))
+#+end_src
+
+Stop warnings buffer from automatically coming up. (Emacs 28)
 #+begin_src emacs-lisp :lexical t :tangle init.el
   (use-package emacs
     :straight nil
@@ -461,8 +468,6 @@ Add and configure some additional tools.
       "gU" 'magit-unstage-file
       "gg" 'hydra-my-git-menu/body
       "gy" 'my/magit-yank-branch-name)
-    :custom
-    (magit-completing-read-function 'ivy-completing-read)
     :config
     (defun my/magit-yank-branch-name ()
       "Show the current branch in the echo-area and add it to the `kill-ring'."
@@ -544,10 +549,6 @@ Treemacs provides a nice file explorer for projects.
   (use-package treemacs-evil
     :straight t
     :after (evil treemacs))
-
-  ;; (use-package treemacs-projectile
-  ;;   :straight t
-  ;;   :after (projectile treemacs))
 
   (use-package treemacs-magit
     :straight t
@@ -636,9 +637,9 @@ The Language Server Protocol (LSP) defines the protocol used between an editor o
     :gfhook
     #'lsp-enable-which-key-integration
     :commands lsp
-    :custom
-    (lsp-completion-provider :capf)
-    (lsp-keymap-prefix "C-l"))
+    :init
+    (setq lsp-completion-provider :capf
+          lsp-keymap-prefix "C-l"))
 
   (use-package lsp-ui
     :straight t
@@ -917,6 +918,7 @@ Using the built in =js-mode=. This handles both vanilla js and =.jsx=.
 #+end_src
 * TODO To Do List
 ** DONE Emacs bindings in evil mode
+** TODO Fix ~tab~ not expanding headlines in normal mode
 ** TODO Test JS / TS stuff more
 ** TODO Add JS REPL (skewer?)
 ** TODO Add keys for LSP

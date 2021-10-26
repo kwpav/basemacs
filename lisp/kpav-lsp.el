@@ -5,9 +5,9 @@
   :gfhook
   #'lsp-enable-which-key-integration
   :commands lsp
-  :custom
-  (lsp-completion-provider :capf)
-  (lsp-keymap-prefix "C-l"))
+  :init
+  (setq lsp-completion-provider :capf
+        lsp-keymap-prefix "C-l"))
 
 (use-package lsp-ui
   :straight t

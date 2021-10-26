@@ -21,7 +21,7 @@
 (use-package ctrlf
   :straight t
   :general
-  (evil-normal-state-map "/" 'ctrlf-forward-default)
+  (evil-normal-state-map "/" 'ctrlf-forward-fuzzy-regexp)
   :init
   (ctrlf-mode +1))
 
@@ -88,8 +88,8 @@
   ;; Optionally configure the register formatting. This improves the register
   ;; preview for `consult-register', `consult-register-load',
   ;; `consult-register-store' and the Emacs built-ins.
-  ;; (setq register-preview-delay 0
-  ;;       register-preview-function #'consult-register-format)
+  (setq register-preview-delay 0
+        register-preview-function #'consult-register-format)
 
   ;; Optionally tweak the register preview window.
   ;; This adds thin lines, sorting and hides the mode line of the window.

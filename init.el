@@ -12,9 +12,9 @@
 ;; emacs
 (require 'kpav-evil)
 (require 'kpav-selectrum)
+(require 'kpav-org)
 (require 'kpav-ui)
 (require 'kpav-windows-and-buffers)
-(require 'kpav-org)
 ;; tools
 (require 'kpav-project)
 (require 'kpav-git)
@@ -26,6 +26,11 @@
 (require 'kpav-clojure)
 (require 'kpav-common-lisp)
 (require 'kpav-js)
+
+(use-package emacs
+  :straight nil
+  :general
+  (general-define-key "<escape>" 'keyboard-escape-quit))
 
 (use-package emacs
   :straight nil

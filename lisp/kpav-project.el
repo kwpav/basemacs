@@ -19,10 +19,6 @@
   :straight t
   :after (evil treemacs))
 
-;; (use-package treemacs-projectile
-;;   :straight t
-;;   :after (projectile treemacs))
-
 (use-package treemacs-magit
   :straight t
   :after (treemacs))

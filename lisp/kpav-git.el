@@ -16,8 +16,6 @@
     "gU" 'magit-unstage-file
     "gg" 'hydra-my-git-menu/body
     "gy" 'my/magit-yank-branch-name)
-  :custom
-  (magit-completing-read-function 'ivy-completing-read)
   :config
   (defun my/magit-yank-branch-name ()
     "Show the current branch in the echo-area and add it to the `kill-ring'."

@@ -4,9 +4,8 @@
   :straight t
   :init
   (use-package undo-fu :straight t)
-  ;; :custom
-  (setq evil-want-keybinding nil)  ;; evil-collection assumes this
-  (setq evil-undo-system 'undo-fu)
+  (setq evil-want-keybinding nil ;; evil-collection assumes this
+        evil-undo-system 'undo-fu)
   :config
   (evil-mode +1)
   ;; turn on Emacs keybinds in evil mode
