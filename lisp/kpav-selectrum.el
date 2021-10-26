@@ -115,7 +115,7 @@
   :general
   ;; ("C-'" 'embark-act)
   ;; ("C-;" 'embark-dwim)
-  ;; ("C-h B" 'embark-bindings)
+  ("C-h B" 'embark-bindings)
   ("C-;" 'embark-act)
   :init
   ;; Optionally replace the key help with a completing-read interface
