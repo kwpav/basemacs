@@ -30,9 +30,9 @@ Here is where the magic happens. Let's load some modules!
   ;; emacs
   (require 'kpav-evil)
   (require 'kpav-selectrum)
+  (require 'kpav-org)
   (require 'kpav-ui)
   (require 'kpav-windows-and-buffers)
-  (require 'kpav-org)
   ;; tools
   (require 'kpav-project)
   (require 'kpav-git)
