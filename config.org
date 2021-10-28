@@ -64,12 +64,10 @@ Evil mode is vim in emacs! Using =undo-fu= here instead of =undo-tree= as I have
     :init
     (use-package undo-fu :straight t)
     (setq evil-want-keybinding nil ;; evil-collection assumes this
-          evil-undo-system 'undo-fu)
+          evil-undo-system 'undo-fu
+          evil-disable-insert-state-bindings t) ;; emacs keys in insert mode
     :config
-    (evil-mode +1)
-    ;; turn on Emacs keybinds in evil mode
-    (setq evil-insert-state-map (make-sparse-keymap))
-    (define-key evil-insert-state-map (kbd "<escape>") 'evil-normal-state))
+    (evil-mode +1))
 #+end_src
 The bit about using Emacs keybinds in evil mode is from https://stackoverflow.com/questions/25542097/emacs-evil-mode-how-to-change-insert-state-to-emacs-state-automatically
 
