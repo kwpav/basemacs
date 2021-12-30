@@ -25,13 +25,15 @@ Load the base config.
   (require 'basemacs-core)
 #+end_src
 
-* Modules
-Use the [[file:config.org][basemacs modules]] to get some extra functionality.
+* COMMENT Modules
+*NOTE* Remove =COMMENT= from the header to use this.
+
+Use the [[file:basemacs-modules.org][basemacs modules]] to get some extra functionality.
 
 #+begin_src emacs-lisp :tangle init.el
-  ;; (require 'basemacs-ui)
-  ;; (require 'basemacs-ivy)
-  ;; (require 'basemacs-evil)
+  (require 'basemacs-ui)
+  (require 'basemacs-ivy)
+  (require 'basemacs-evil)
 #+end_src
 
 * EOF

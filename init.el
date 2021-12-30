@@ -4,9 +4,5 @@
 
 (require 'basemacs-core)
 
-;; (require 'basemacs-ui)
-;; (require 'basemacs-ivy)
-;; (require 'basemacs-evil)
-
 (provide 'init)
 ;;; init.el ends here

@@ -320,7 +320,7 @@ vim-commentary emulation.
 * Programming
 Programming is probably the main reason most people use Emacs, so there are lots of settings and packages for it.
 ** General Code
-Two of the most important features for me while coding are autocompletion and error checking/linting. Here is a simple setup that provides that.
+Two of the most important features for me while coding are autocompletion and error checking/linting. Here is a simple setup that provides that, along with a collection of code snippets.
 #+begin_src emacs-lisp :tangle lisp/basemacs-code.el
   ;;; basemacs-code.el --- -*- lexical-binding: t -*-
 #+end_src
@@ -329,7 +329,7 @@ Two of the most important features for me while coding are autocompletion and er
 Company is a text completion framework for Emacs.
 #+end_quote
 
-=company= is essentially the standard package that is used for code completion. It works decently out of the box, has backends for nearly all languages, and is integrated with LSP.
+Company is essentially the standard package that is used for Emacs code completion. It works decently out of the box, has backends for nearly all languages, and is integrated with LSP.
 
 #+begin_src emacs-lisp :tangle lisp/basemacs-code.el
   (use-package company
@@ -350,6 +350,30 @@ Flycheck works out of the box for just about everything and is integrated with l
     :config
     (global-flycheck-mode +1))
 #+end_src
+
+#+begin_quote
+YA Snippet is a template system for Emacs.
+#+end_quote
+
+Set the snippets directory to be in this folder, automatically create it if it does not exist.
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package yasnippet
+    :straight t
+    :preface
+    (defconst basemacs-snippets-dir (expand-file-name "snippets/" user-emacs-directory))
+    (make-directory basemacs-snippets-dir :parents)
+    :custom
+    (yas-snippet-dirs (list basemacs-snippets-dir))
+    :config
+    (yas-global-mode +1))
+#+END_SRC
+
+Install the official snippet collection, this contains snippets for several programming languages.
+#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-core.el
+  (use-package yasnippet-snippets
+    :straight t
+    :after yasnippet)
+#+END_SRC
 
 #+begin_src emacs-lisp :tangle lisp/basemacs-code.el
   (provide 'basemacs-code)

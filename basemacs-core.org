@@ -135,7 +135,7 @@ Set the leader key as =C-c=. This can be customized later on in the config file.
       "Basemacs leader key"
       :type 'key-sequence
       :group 'basemacs)
-    (defcustom basemacs-local-leader "C-c C-m"
+    (defcustom basemacs-local-leader "C-c m"
       "Basemacs local leader key"
       :type 'key-sequence
       :group 'basemacs)
@@ -243,31 +243,6 @@ Display line numbers in all programming modes.
     :ghook
     ('prog-mode-hook #'display-line-numbers-mode))
 #+end_src
-
-** Snippets
-#+begin_quote
-YA Snippet is a template system for Emacs.
-#+end_quote
-
-Set the snippets directory to be in this folder, automatically create it if it does not exist.
-#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package yasnippet
-    :straight t
-    :preface
-    (defconst basemacs-snippets-dir (expand-file-name "snippets/" user-emacs-directory))
-    (make-directory basemacs-snippets-dir :parents)
-    :custom
-    (yas-snippet-dirs (list basemacs-snippets-dir))
-    :config
-    (yas-global-mode +1))
-#+END_SRC
-
-Install the official snippet collection, this contains snippets for several programming languages.
-#+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package yasnippet-snippets
-    :straight t
-    :after yasnippet)
-#+END_SRC
 
 * EOF
 That's all folks!
