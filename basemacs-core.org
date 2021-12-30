@@ -199,17 +199,6 @@ Use utf-8 for everything.
     (set-language-environment "UTF-8"))
 #+end_src
 
-Emacs likes to create lots of extra files for things, these settings prevent that. Also, create a newline at the end of the file on save.
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package files
-    :straight (:type built-in)
-    :custom
-    (make-backup-files nil)    ;; stop creating backup~ files
-    (auto-save-default nil)    ;; stop creating #autosave# files
-    (create-lockfiles nil)     ;; stop creating .# files
-    (require-final-newline t)) ;; auto add newline at the end of file
-#+end_src
-
 Use the system clipboard for killing/yanking (copying/pasting) and display column information in the modeline.
 #+begin_src emacs-lisp :tangle lisp/basemacs-core.el
   (use-package simple
@@ -230,50 +219,17 @@ When the lines in a file are so long that performance could suffer to an unaccep
     (global-so-long-mode +1))
 #+end_src
 
-When you visit a file, point goes to the last place where it was when you previously visited the same file.
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package saveplace
-    :straight (:type built-in)
-    :config
-    (save-place-mode +1))
-#+end_src
-
 ** Custom File
-Put customizations in =custom.el= instead of this file. This will also create =custom.el= if it does not exist yet.
+Put customizations in =custom.el= instead of =init.el=. This keeps =init.el= clean, which is helpful for version control.
 #+begin_src emacs-lisp :tangle lisp/basemacs-core.el
   (use-package cus-edit
     :straight (:type built-in)
     :custom
+    ;; create custom.el if it doesnt exist yet
     (custom-file (expand-file-name "custom.el" user-emacs-directory))
     :config
     (if (file-exists-p custom-file)
         (load-file custom-file)))
-#+end_src
-
-** Startup
-Display the =*scratch*= buffer at startup instead of the dashboard.
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package emacs
-    :straight (:type built-in)
-    :custom
-    (inhibit-startup-screen t))
-#+end_src
-
-** Cursor
-Don't blink the cursor.
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package frame
-    :straight (:type built-in)
-    :config
-    (blink-cursor-mode -1))
-#+end_src
-
-Highlight the line the cursor is on.
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package hl-line
-    :straight (:type built-in)
-    :config
-    (global-hl-line-mode +1))
 #+end_src
 
 * Programming
@@ -287,58 +243,7 @@ Display line numbers in all programming modes.
     ('prog-mode-hook #'display-line-numbers-mode))
 #+end_src
 
-** Pair Matching
-Insert matching pairs for things like parens, brackets, quotes, etc. Use it in programming and org modes.
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package elec-pair
-    :straight (:type built-in)
-    :ghook
-    ('prog-mode-hook #'electric-pair-mode)
-    ('org-mode-hook #'electric-pair-mode))
-#+end_src
-
-Highlight paren when the cursor is over its matching pair. Also reduce the delay of it to =0= so it will be instant.
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package paren
-    :straight (:type built-in)
-    :custom
-    (show-paren-delay 0)
-    :config
-    (show-paren-mode +1))
-#+end_src
-
-** Code Completion
-*** company
-#+begin_quote
-Company is a text completion framework for Emacs.
-#+end_quote
-
-=company= is the standard package that is used for code completion. It works decently out of the box, has backends for nearly all languages, and is integrated with LSP.
-
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package company
-    :straight t
-    :config
-    (global-company-mode +1))
-#+end_src
-
-** Error Checking
-*** flycheck
-#+begin_quote
-Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs
-#+end_quote
-
-Flycheck works out of the box for just about everything and is integrated with lots of other packages.
-
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package flycheck
-    :straight t
-    :config
-    (global-flycheck-mode +1))
-#+end_src
-
 ** Snippets
-*** yasnippet
 #+begin_quote
 YA Snippet is a template system for Emacs.
 #+end_quote

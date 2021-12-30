@@ -13,17 +13,11 @@ If you want to know a little bit more about why I created this project, see this
 ** Packages Used
 =basemacs= uses a small set of packages to get started.
 
-Package management and configuration are handled with:
 - [[https://github.com/raxod502/straight.el][straight.el]] - package management
 - [[https://github.com/jwiegley/use-package][use-package]] - package configuration
 - [[https://github.com/noctuid/general.el][general.el]] - configuring custom keys and hooks
-
-Essential packages:
-- [[http://company-mode.github.io/][company]] - code completion
-- [[https://github.com/flycheck/flycheck][flycheck]] - error checking
 - [[https://github.com/justbur/emacs-which-key][which-key]] - display key combos
 - [[https://github.com/joaotavora/yasnippet][yasnippet]] - code snippets
-
 
 * Requirements
 The only requirements are:
