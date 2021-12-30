@@ -21,13 +21,12 @@ Package management and configuration are handled with:
 Essential packages:
 - [[http://company-mode.github.io/][company]] - code completion
 - [[https://github.com/flycheck/flycheck][flycheck]] - error checking
-- [[https://magit.vc/][magit]] - git interaction
 - [[https://github.com/justbur/emacs-which-key][which-key]] - display key combos
 - [[https://github.com/joaotavora/yasnippet][yasnippet]] - code snippets
 
+
 * Requirements
 The only requirements are:
-- =git=
 - Emacs 27+
 
 I have only tested it on OSX and Linux, but it should have no problems working in other environments.

@@ -164,10 +164,5 @@
   :straight t
   :after yasnippet)
 
-(use-package magit
-  :straight t
-  :general
-  ("C-x g" 'magit-status))
-
 (provide 'basemacs-core)
 ;;; basemacs-core.el ends here

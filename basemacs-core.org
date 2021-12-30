@@ -365,19 +365,6 @@ Install the official snippet collection, this contains snippets for several prog
     :after yasnippet)
 #+END_SRC
 
-** Version Control
-*** magit
-#+begin_quote
-Magit is a complete text-based user interface to Git.
-#+end_quote
-
-#+begin_src emacs-lisp :tangle lisp/basemacs-core.el
-  (use-package magit
-    :straight t
-    :general
-    ("C-x g" 'magit-status))
-#+end_src
-
 * EOF
 That's all folks!
 #+begin_src emacs-lisp :tangle lisp/basemacs-core.el
