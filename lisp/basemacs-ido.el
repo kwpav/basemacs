@@ -1,3 +1,5 @@
+;;; basemacs-ido.el --- -*- lexical-binding: t -*-
+
 (use-package ido
   :straight nil
   :custom

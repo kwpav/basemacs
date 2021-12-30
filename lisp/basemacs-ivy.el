@@ -1,3 +1,5 @@
+;;; basemacs-ivy.el --- -*- lexical-binding: t -*-
+
 (use-package ivy
   :straight t
   :demand t

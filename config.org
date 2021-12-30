@@ -29,9 +29,9 @@ Load the base config.
 Use the [[file:config.org][basemacs modules]] to get some extra functionality.
 
 #+begin_src emacs-lisp :tangle init.el
-  (require 'basemacs-ui)
-  (require 'basemacs-ivy)
-  (require 'basemacs-evil)
+  ;; (require 'basemacs-ui)
+  ;; (require 'basemacs-ivy)
+  ;; (require 'basemacs-evil)
 #+end_src
 
 * EOF

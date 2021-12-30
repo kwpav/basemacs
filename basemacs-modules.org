@@ -5,9 +5,12 @@ This is a set of modules for =basemacs=. As with the rest of =basemacs=, the mod
 
 They are slightly more opinionated than the initial configuration, but are simple and easy to modify.
 * UI
+#+begin_src emacs-lisp :tangle lisp/basemacs-ui.el
+  ;;; basemacs-ui.el --- -*- lexical-binding: t -*-
+#+end_src
+
 The UI module contains some things that make Emacs look nicer.
-** basemacs-ui
-*** rainbow-delimiters
+** rainbow-delimiters
 #+begin_quote
 =rainbow-delimiters= is a "rainbow parentheses"-like mode which highlights delimiters such as parentheses, brackets or braces according to their depth. Each successive level is highlighted in a different color. This makes it easy to spot matching delimiters, orient yourself in the code, and tell which statements are at a given depth.
 #+end_quote
@@ -18,7 +21,7 @@ Turn this on only for programming modes.
     :straight t
     :ghook 'prog-mode-hook)
 #+end_src
-*** variable-pitch
+** variable-pitch
 =variable-pitch-mode= allows us to have multiple fonts in a single buffer. This is useful for =org-mode= which can have prose, code, and other things, in the same file.
 
 Turn =variable-pitch-mode= on for =org-mode=.
@@ -28,7 +31,7 @@ Turn =variable-pitch-mode= on for =org-mode=.
     :ghook
     ('org-mode-hook #'variable-pitch-mode))
 #+end_src
-*** font
+** font
 Now we set the main font to use in all buffers, and the proportional and mono fonts in =variable-pitch-mode=.
 #+begin_src emacs-lisp :tangle lisp/basemacs-ui.el
   (use-package faces
@@ -43,7 +46,7 @@ Now we set the main font to use in all buffers, and the proportional and mono fo
 #+end_src
 
 The =:height= value for the =default= face is the font size multiplied by 10, e.g. =11 x 10 = 110=. The =:height= values for the =variable-pitch= and =fixed-pitch= faces are their sizes relative to the default face. This is because they use a floating point number. An integer may be used here, but then fonts will not scale gracefully.
-*** modus-themes
+** modus-themes
 These light and dark themes are WCAG compliant, have support for =variable-pitch-mode= in =org-mode=, and are highly customizable.
 
 Light theme
@@ -58,7 +61,7 @@ Light theme
     :config
     (modus-themes-load-operandi))
 #+end_src
-*** EOF
+** EOF
 #+begin_src emacs-lisp :tangle lisp/basemacs-ui.el
   (provide 'basemacs-ui)
   ;;; basemacs-ui.el ends here
@@ -75,6 +78,11 @@ There are 4 options to choose from:
 *NOTE* Only one of these modules should be used at a time - all of these modules all change =M-x=, and =basemacs-ivy= and =basemacs-selectrum= change =C-s=. The packages themselves can all be installed at once without issue.
 ** basemacs-ido
 The built-in =ido-mode= is pretty good with some good default settings and extra packages.
+
+#+begin_src emacs-lisp :tangle lisp/basemacs-ido.el
+  ;;; basemacs-ido.el --- -*- lexical-binding: t -*-
+#+end_src
+
 
 #+begin_src emacs-lisp :tangle lisp/basemacs-ido.el
   (use-package ido
@@ -117,6 +125,11 @@ The built-in =ido-mode= is pretty good with some good default settings and extra
 #+begin_quote
 *Helm* is an Emacs framework for incremental completions and narrowing selections.
 #+end_quote
+
+#+begin_src emacs-lisp :tangle lisp/basemacs-helm.el
+  ;;; basemacs-helm.el --- -*- lexical-binding: t -*-
+#+end_src
+
 =helm= is the most feature packed out of all the other options here. It is also the most different as it does not use the minibuffer, rather it opens up its own window.
 #+begin_src emacs-lisp :tangle lisp/basemacs-helm.el
   (use-package helm
@@ -133,10 +146,14 @@ The built-in =ido-mode= is pretty good with some good default settings and extra
   ;;; basemacs-helm.el ends here
 #+end_src
 ** basemacs-ivy
-*** Ivy / Counsel / Swiper
 #+begin_quote
 Ivy is a generic completion mechanism for Emacs
 #+end_quote
+
+#+begin_src emacs-lisp :tangle lisp/basemacs-ivy.el
+  ;;; basemacs-ivy.el --- -*- lexical-binding: t -*-
+#+end_src
+
 #+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-ivy.el
   (use-package ivy
     :straight t
@@ -204,13 +221,16 @@ Replace keybindings for emacs search with swiper.
     :general
     ("C-s" 'swiper))
 #+END_SRC
-*** EOF
+
 #+begin_src emacs-lisp :tangle lisp/basemacs-ivy.el
   (provide 'basemacs-ivy)
   ;;; basemacs-ivy.el ends here
 #+end_src
 ** basemacs-selectrum
 =selectrum= is the newest out of all the options, it is similar to ivy but with simpler code, and it was created by the author of =straight.el=.
+#+begin_src emacs-lisp :tangle lisp/basemacs-selectrum.el
+  ;;; basemacs-selectrum.el --- -*- lexical-binding: t -*-
+#+end_src
 
 #+begin_src emacs-lisp :tangle lisp/basemacs-selectrum.el
   (use-package selectrum
@@ -241,7 +261,19 @@ Replace keybindings for emacs search with swiper.
 #+end_src
 * Vim Emulation
 Go to the dark side with =evil= and get near perfect =vim= emulation.
-** basemacs-evil
+#+begin_src emacs-lisp :tangle lisp/basemacs-evil.el
+  ;;; basemacs-evil.el --- -*- lexical-binding: t -*-
+#+end_src
+
+Set the leader keys to =SPC=, e.g. Doom/Spacemacs.
+#+begin_src emacs-lisp :lexical t :tangle init.el
+  (use-package emacs
+    :straight (:type built-in)
+    :custom
+    (basemacs-leader "SPC")
+    (basemacs-local-leader "SPC m"))
+#+end_src
+
 Evil mode is vim in emacs! Using =undo-fu= here instead of =undo-tree= as I have found that =undo-fu= seems to be quicker and less buggy than =undo-tree=.
 #+BEGIN_SRC emacs-lisp :tangle lisp/basemacs-evil.el
   (use-package evil
@@ -273,7 +305,7 @@ surround.vim emulation.
     (global-evil-surround-mode 1))
 #+END_SRC
 
-vim-commentary emulation
+vim-commentary emulation.
 #+begin_src emacs-lisp :tangle lisp/basemacs-evil.el
   (use-package evil-commentary
     :straight t
@@ -285,5 +317,41 @@ vim-commentary emulation
   (provide 'basemacs-evil)
   ;;; basemacs-evil.el ends here
 #+end_src
-** TODO basemacs-evil-general
-Use =SPC= as the leader key.
+* Programming
+Programming is probably the main reason most people use Emacs, so there are lots of settings and packages for it.
+** General Code
+Two of the most important features for me while coding are autocompletion and error checking/linting. Here is a simple setup that provides that.
+#+begin_src emacs-lisp :tangle lisp/basemacs-code.el
+  ;;; basemacs-code.el --- -*- lexical-binding: t -*-
+#+end_src
+
+#+begin_quote
+Company is a text completion framework for Emacs.
+#+end_quote
+
+=company= is essentially the standard package that is used for code completion. It works decently out of the box, has backends for nearly all languages, and is integrated with LSP.
+
+#+begin_src emacs-lisp :tangle lisp/basemacs-code.el
+  (use-package company
+    :straight t
+    :config
+    (global-company-mode +1))
+#+end_src
+
+#+begin_quote
+Flycheck is a modern on-the-fly syntax checking extension for GNU Emacs
+#+end_quote
+
+Flycheck works out of the box for just about everything and is integrated with lots of other packages.
+
+#+begin_src emacs-lisp :tangle lisp/kpav-code.el
+  (use-package flycheck
+    :straight t
+    :config
+    (global-flycheck-mode +1))
+#+end_src
+
+#+begin_src emacs-lisp :tangle lisp/basemacs-code.el
+  (provide 'basemacs-code)
+  ;;; basemacs-code.el ends here
+#+end_src

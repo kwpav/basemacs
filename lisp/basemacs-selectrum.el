@@ -1,3 +1,5 @@
+;;; basemacs-selectrum.el --- -*- lexical-binding: t -*-
+
 (use-package selectrum
   :straight t
   :demand t

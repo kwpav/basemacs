@@ -1,3 +1,5 @@
+;;; basemacs-helm.el --- -*- lexical-binding: t -*-
+
 (use-package helm
   :straight t
   :demand t

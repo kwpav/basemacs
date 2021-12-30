@@ -1,3 +1,5 @@
+;;; basemacs-ui.el --- -*- lexical-binding: t -*-
+
 (use-package rainbow-delimiters
   :straight t
   :ghook 'prog-mode-hook)
@@ -21,7 +23,7 @@
   :straight t
   :init
   (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs nil
+        modus-themes-bold-constructs t
         modus-themes-region '(bg-only no-extend))
   (modus-themes-load-themes)
   :config

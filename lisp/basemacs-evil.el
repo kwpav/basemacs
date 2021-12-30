@@ -1,3 +1,5 @@
+;;; basemacs-evil.el --- -*- lexical-binding: t -*-
+
 (use-package evil
   :straight t
   :init
