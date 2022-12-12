@@ -1,7 +1,7 @@
 ;;; early-init.el --- -*- lexical-binding: t -*-
 
 (setq package-enable-at-startup nil)
-(fset #'package--ensure-init-file #'ignore) ;; DEPRECATED Removed in 28
+(fset #'package--ensure-init-file #'ignore)
 
 (setq frame-inhibit-implied-resize t)
 

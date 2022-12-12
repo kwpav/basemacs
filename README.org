@@ -4,65 +4,71 @@ An Emacs base to build on.
 * About
 =basemacs= is the (mostly) unopinionated start to an Emacs configuration -- a *base* to build on. It contains some sane defaults and uses a minimal set of packages to get you started with your own config.
 
-Package management and configuration are handled with:
-- [[https://github.com/raxod502/straight.el][straight.el]] - for package management
-- [[https://github.com/jwiegley/use-package][use-package ]]- for package configuration
-- [[https://github.com/noctuid/general.el][general.el]] - for configuring custom keys and hooks
+It is:
+- /Literate/, all configuration is done in Org files
+- /Small/, only 4 packages and their depeendencies
+- /Reproducable/, automatically install specified package versions thanks to [[https://github.com/raxod502/straight.el][straight.el]]  and [[https://github.com/jwiegley/use-package][use-package]]
+- /Hackable/, no batteries included, hack up your own!
 
-Essential packages:
-- [[http://company-mode.github.io/][company]] - for code completion
-- [[https://github.com/flycheck/flycheck][flycheck]] - for error checking
-- [[https://magit.vc/][magit]] - for git interaction
-- [[https://github.com/justbur/emacs-which-key][which-key]] - to display key combos
-- [[https://github.com/joaotavora/yasnippet][yasnippet]] - for code snippets
+=basemacs= is meant to be simple, so fork it and hack away!
 
-This project was inspired by:
-- [[https://github.com/ianpan870102/yay-evil-emacs][yay-evil-emacs]]
-- [[https://github.com/MatthewZMD/.emacs.d][M-EMACS]]
-- [[https://github.com/hlissner/doom-emacs][doom-emacs]]
-- [[https://www.spacemacs.org/][spacemacs]]
+If you want to know a little bit more about why I created this project, see this [[https://kwpav.github.io/posts/emacs_refinancing/][blog post]].
+** Packages Used
+=basemacs= uses a small set of packages to get started.
 
+- [[https://github.com/raxod502/straight.el][straight.el]] - package management
+- [[https://github.com/jwiegley/use-package][use-package]] - package configuration
+- [[https://github.com/noctuid/general.el][general.el]] - configuring custom keys and hooks
+- [[https://github.com/justbur/emacs-which-key][which-key]] - display key combos
 * Requirements
-=basemacs= requires only:
-- =git=
+The only requirements are:
 - Emacs 27+
 
-It also uses DejaVu fonts, but these are not required and can be easily changed.
-
 I have only tested it on OSX and Linux, but it should have no problems working in other environments.
+* Using
+Besides copying and pasting things from this config, here is how to use it:
+** Installation
+The easiest way to get started is to fork this repository and use it as the start of your own configuration. There should be no real need to keep track of updates.
 
-* Getting Started
-There are a few ways to use this:
+After that, there are a few ways of using this:
+*** Standard configuration
+Backup your current config and clone this into =~/.emacs.d= or =~/.config/emacs=
 
-- Backup your current config and clone this into =~/.emacs.d= or =~/.config/emacs=
 After you backup your current config, clone this repo to =~/.emacs.d=:
 #+begin_src sh
-  git clone https://github.com/kwpav/basemacs.git ~/.emacs.d
+  git clone https://github.com/<user>/basemacs.git ~/.emacs.d
 #+end_src
+*** Chemacs
+Clone this repo to your preferred location and use [[https://github.com/plexus/chemacs][chemacs]].
 
-Or to =~./config/emacs=:
+For example,  clone this repo to your preferred folder, e.g. =~/.config/basemacs=:
 #+begin_src sh
-  git clone https://github.com/kwpav/basemacs.git ~/.config/emacs
-#+end_src
-
-- Clone this repo to your preferred location and use [[https://github.com/plexus/chemacs][chemacs]]
-#+begin_src sh
-  git clone https://github.com/kwpav/basemacs.git ~/.config/basemacs
+  git clone https://github.com/<user>/basemacs.git ~/.config/basemacs
 #+end_src
 
 Then add the cloned location to =~/.emacs-profiles.el=:
 #+begin_src emacs-lisp
   (("default" . ((user-emacs-directory . "~/.emacs.d")))
-   ("basemacs" . ((user-emacs-directory . "~/config/basemacs"))))
+   ("basemacs" . ((user-emacs-directory . "~/.config/basemacs"))))
 #+end_src
+** First Steps
+Now that the config is in the right place, simply start up Emacs! The first time may take a little while as packages install, but subsequent startups will be much faster.
 
-Run with =emacs --with-profile basemacs=.
+Customization is meant to be done by making changes in [[file:config.org][config.org]] and tangling,  but it can also be done editing the =elisp= directly (or any other way you fancy).
 
-- Or you can just copy/paste whatever bits and pieces of this you want to your own config
+To tangle, simply make changes in =config.org= and run the =org-babel-tangle= command, it is bound to ~C-c C-v t~ by default.
+** Next Steps
+Ok, we've got a basic config, now what? Check out the [[file:modules.org][modules]]! This contains a set of modules for =basemacs= that provide some extra features, such as: narrowing/completion frameworks (=helm=, =ivy=, etc.), making things look a little nicer with some themes, =vim= emulation, and more!
 
-Now that the config is in the right place, simply start up Emacs! The first time running it may take a few minutes as packages install.
-
-* How does this work?
-[[file:config.org][config.org]] contains all the code for both  =early-init.el= and =init.el=. The code in the =src= blocks is tangled (copied) to those files using =org-babel-tangle= ( ~C-c C-v t~ ).
-
-The code can be edited  directly in the file, or by putting the cursor in the =src= block and using  =org-edit-special= ( ~C-c '~ ). This opens the code up in an =elisp= buffer for easier editing and =eval='ing. Save any changes made by pressing ~C-c '~ again, abort any changes with ~C-c k~.
+You can also check out [[file:base.org][basemacs-core.org]] which contains the =basemacs= setup and modify that if you find something you don't like. (Don't forget to tangle it!)
+* FAQ
+** What is the difference between =basemacs= and all the other Emacs distros/starters out there?
+=basemacs= is intended to be smaller and simpler than the others. There are no "batteries" included. =basemacs= is meant as a starting point for an Emacs configuration, it can easily be modified to fit a users needs as there is no magic going on here.
+* Inspired By
+This project was inspired by all these other great Emacs starter kits/configurations/distributions/whatever you want to call them:
+- [[https://github.com/ianpan870102/yay-evil-emacs][yay-evil-emacs]]
+- [[https://github.com/MatthewZMD/.emacs.d][M-EMACS]]
+- [[https://github.com/hlissner/doom-emacs][doom-emacs]]
+- [[https://www.spacemacs.org/][Spacemacs]]
+- [[https://github.com/bbatsov/prelude][Prelude]]
+- [[https://github.com/seagle0128/.emacs.d][Centaur Emacs]]
